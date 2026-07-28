@@ -28,6 +28,39 @@
   "description": "Securely upload your financial information. Our system analyzes your complete financial picture, a trained analyst reviews every report, and you receive a personalized roadmap for your next 90 days."
 }
 </script>
+<!-- ============================================================
+     INTEGRATION CONFIG
+     Fill these in as you create each account. Every value is
+     optional — empty values fall back gracefully:
+       · no checkout link  → button opens the waitlist email modal
+       · no sample URL     → button opens the email-capture modal
+       · no chat/analytics → nothing is loaded
+     See README.md for step-by-step activation instructions.
+     ============================================================ -->
+<script>
+window.OPERATOR_CONFIG = {
+  // Stripe Payment Links (Stripe Dashboard → Payment Links → copy URL)
+  checkout: {
+    snapshot:    "",   // e.g. "https://buy.stripe.com/xxxx"
+    fullReset:   "",
+    resetReview: ""
+  },
+  // Intake questionnaire share URL (Typeform / Fillout). Used as the
+  // checkout fallback if a plan's Stripe link is empty.
+  intakeFormUrl: "",
+  // Sample report URL (hosted PDF or gated page)
+  sampleReportUrl: "",
+  // Email-capture endpoint (e.g. Formspree: "https://formspree.io/f/xxxx").
+  // Powers the waitlist/sample modal. Empty = mailto fallback.
+  emailFormEndpoint: "",
+  // Crisp chat Website ID (app.crisp.chat → Settings → Setup). "" = no chat.
+  crispWebsiteId: "",
+  // Plausible analytics domain (e.g. "useoperator.com"). "" = no analytics.
+  plausibleDomain: "",
+  // Fallback contact for the mailto path
+  contactEmail: "hello@example.com"
+};
+</script>
 <style>
   :root {
     --bg: #0A0A0B;
@@ -562,6 +595,60 @@
   }
   .copyright { font-size: 0.8rem; color: var(--text-tertiary); }
 
+  /* ---------- Modal (email capture fallback) ---------- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    width: 100%;
+    max-width: 440px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+  }
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+  .modal-x {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+  .modal-x:hover { color: var(--text); }
+  .modal p { font-size: 0.92rem; margin-bottom: 20px; }
+  .modal form { display: flex; flex-direction: column; gap: 12px; }
+  .modal input[type="email"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    padding: 14px 20px;
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+  }
+  .modal input[type="email"]:focus { border-color: var(--text-tertiary); }
+  .modal .modal-fine { font-size: 0.78rem; color: var(--text-tertiary); margin: 12px 0 0; }
+
   /* ---------- Desktop ---------- */
   @media (min-width: 720px) {
     .nav-links { display: flex; }
@@ -603,7 +690,7 @@
     <p class="hero-sub">Operator is an AI-assisted, human-reviewed financial operating system: upload your numbers, and get a personalized roadmap showing the exact moves that take you toward financial freedom.</p>
     <div class="hero-ctas">
       <a href="#pricing" class="btn btn-primary">Start My Financial Reset</a>
-      <a href="#dashboard" class="btn btn-secondary">See a Sample Report</a>
+      <a href="#dashboard" class="btn btn-secondary" data-action="sample">See a Sample Report</a>
     </div>
     <p class="hero-note">Bank-level encryption &middot; Your data is never sold &middot; No investment products, ever</p>
 
@@ -933,7 +1020,7 @@
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Core financial picture summary</div>
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Human-reviewed before delivery</div>
         </div>
-        <a href="#" class="btn btn-secondary">Start My Financial Reset</a>
+        <a href="#" class="btn btn-secondary" data-checkout="snapshot">Start My Financial Reset</a>
       </div>
       <div class="price-card featured">
         <span class="plan-tag">Most Popular</span>
@@ -949,7 +1036,7 @@
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>90-day action plan</div>
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Report Q&amp;A included</div>
         </div>
-        <a href="#" class="btn btn-primary">Start My Financial Reset</a>
+        <a href="#" class="btn btn-primary" data-checkout="fullReset">Start My Financial Reset</a>
       </div>
       <div class="price-card">
         <div>
@@ -963,7 +1050,7 @@
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Updated 90-day plan each quarter</div>
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Optional walkthrough call</div>
         </div>
-        <a href="#" class="btn btn-secondary">Start My Financial Reset</a>
+        <a href="#" class="btn btn-secondary" data-checkout="resetReview">Start My Financial Reset</a>
       </div>
     </div>
   </div>
@@ -975,7 +1062,7 @@
   <p>Twenty minutes of upload. One human-reviewed roadmap. A clear next 90 days.</p>
   <div class="hero-ctas">
     <a href="#pricing" class="btn btn-primary">Start My Financial Reset</a>
-    <a href="#dashboard" class="btn btn-secondary">See a Sample Report</a>
+    <a href="#dashboard" class="btn btn-secondary" data-action="sample">See a Sample Report</a>
   </div>
 </div>
 
@@ -996,6 +1083,118 @@
     <p class="copyright">© 2026 Operator. All rights reserved.</p>
   </div>
 </footer>
+
+<!-- ======================= EMAIL CAPTURE MODAL ======================= -->
+<div class="modal-overlay" id="capture-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-title">Get the sample report</h3>
+      <button class="modal-x" type="button" aria-label="Close">&times;</button>
+    </div>
+    <p id="modal-copy">Leave your email and we'll send it over.</p>
+    <form id="capture-form">
+      <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" />
+      <input type="hidden" name="interest" id="capture-interest" value="" />
+      <button class="btn btn-primary" type="submit">Send it to me</button>
+    </form>
+    <p class="modal-fine">No spam. One email, then silence unless you ask for more.</p>
+  </div>
+</div>
+
+<!-- ======================= INTEGRATION WIRING ======================= -->
+<script>
+(function () {
+  var cfg = window.OPERATOR_CONFIG || {};
+  var overlay = document.getElementById("capture-modal");
+  var form = document.getElementById("capture-form");
+
+  function openModal(title, copy, interest) {
+    document.getElementById("modal-title").textContent = title;
+    document.getElementById("modal-copy").textContent = copy;
+    document.getElementById("capture-interest").value = interest || "";
+    overlay.classList.add("open");
+    form.querySelector('input[type="email"]').focus();
+  }
+  function closeModal() { overlay.classList.remove("open"); }
+  overlay.addEventListener("click", function (e) { if (e.target === overlay) closeModal(); });
+  overlay.querySelector(".modal-x").addEventListener("click", closeModal);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
+  // Checkout buttons → Stripe Payment Link, else intake form, else waitlist modal
+  document.querySelectorAll("[data-checkout]").forEach(function (el) {
+    var plan = el.getAttribute("data-checkout");
+    var link = (cfg.checkout || {})[plan];
+    if (link) {
+      el.href = link;
+    } else if (cfg.intakeFormUrl) {
+      el.href = cfg.intakeFormUrl;
+    } else {
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        openModal("Join the waitlist", "Checkout opens soon. Leave your email and you'll be first in line.", plan);
+      });
+    }
+  });
+
+  // Sample report buttons → hosted sample, else email capture (falls through
+  // to the #dashboard anchor scroll either way is fine, so preventDefault only
+  // when we take over)
+  document.querySelectorAll('[data-action="sample"]').forEach(function (el) {
+    if (cfg.sampleReportUrl) {
+      el.href = cfg.sampleReportUrl;
+      el.target = "_blank";
+      el.rel = "noopener";
+    } else if (cfg.emailFormEndpoint) {
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        openModal("See a sample report", "Leave your email and we'll send over a full sample report.", "sample");
+      });
+    }
+    // No endpoint configured: leave the default #dashboard scroll behavior.
+  });
+
+  // Email capture submit → Formspree-style endpoint, else mailto fallback
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = form.email.value;
+    var interest = document.getElementById("capture-interest").value;
+    function done() {
+      form.innerHTML = '<p style="color: var(--text); margin: 0;">You’re on the list. Talk soon.</p>';
+    }
+    if (cfg.emailFormEndpoint) {
+      fetch(cfg.emailFormEndpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, interest: interest })
+      }).then(done).catch(done);
+    } else {
+      window.location.href = "mailto:" + (cfg.contactEmail || "") +
+        "?subject=" + encodeURIComponent("Operator waitlist (" + (interest || "general") + ")") +
+        "&body=" + encodeURIComponent("Add me to the list: " + email);
+      done();
+    }
+  });
+
+  // Crisp chat — loaded only when a Website ID is set
+  if (cfg.crispWebsiteId) {
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = cfg.crispWebsiteId;
+    var c = document.createElement("script");
+    c.src = "https://client.crisp.chat/l.js";
+    c.async = true;
+    document.head.appendChild(c);
+  }
+
+  // Plausible analytics — loaded only when a domain is set
+  if (cfg.plausibleDomain) {
+    var p = document.createElement("script");
+    p.src = "https://plausible.io/js/script.js";
+    p.defer = true;
+    p.setAttribute("data-domain", cfg.plausibleDomain);
+    document.head.appendChild(p);
+  }
+})();
+</script>
 
 </body>
 </html>

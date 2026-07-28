@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Operator — Know Exactly What to Do Next With Your Money</title>
+<meta name="description" content="Upload your numbers. Get a human-reviewed, personalized financial roadmap for your next 90 days. Not a budgeting app." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Operator",
+  "description": "AI-assisted, human-reviewed financial operating system delivering personalized financial roadmaps.",
+  "slogan": "Know exactly what to do next with your money."
+}
+</script>
+<!-- ============================================================
+     BARE-BONES LAUNCH CONFIG
+     This page can go live with just TWO values:
+       1. checkoutUrl  — one Stripe Payment Link for The Full Reset
+       2. contactEmail — where waitlist mailto: falls back to
+     Everything else is optional. See README.md.
+     ============================================================ -->
+<script>
+window.OPERATOR_CONFIG = {
+  checkoutUrl: "",        // Stripe Payment Link, e.g. "https://buy.stripe.com/xxxx"
+  emailFormEndpoint: "",  // optional Formspree-style endpoint for the waitlist
+  crispWebsiteId: "",     // optional Crisp chat Website ID
+  plausibleDomain: "",    // optional Plausible analytics domain
+  contactEmail: "hello@example.com"
+};
+</script>
+<style>
+  :root {
+    --bg: #0A0A0B;
+    --bg-raised: #111113;
+    --bg-card: #16161A;
+    --border: #26262B;
+    --border-strong: #34343B;
+    --text: #F5F5F7;
+    --text-secondary: #A1A1AA;
+    --text-tertiary: #6E6E76;
+    --accent: #E8E4DC;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-pill: 999px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .container { width: 100%; max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+  h1 { font-size: clamp(2.4rem, 8vw, 4.5rem); }
+  h2 { font-size: clamp(1.7rem, 5vw, 2.6rem); }
+  h3 { font-size: 1.1rem; letter-spacing: -0.02em; }
+  p { color: var(--text-secondary); }
+  a { color: inherit; text-decoration: none; }
+  section { padding: clamp(72px, 11vw, 128px) 0 0; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 28px;
+    border-radius: var(--radius-pill);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--text); color: var(--bg); }
+  .btn-primary:hover { background: #FFFFFF; }
+
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(22, 22, 26, 0.72);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; }
+  .logo-mark { width: 24px; height: 24px; border: 2px solid var(--text); border-radius: 7px; display: grid; place-items: center; }
+  .logo-mark::after { content: ""; width: 7px; height: 7px; background: var(--text); border-radius: 2px; }
+  .nav .btn { padding: 9px 18px; font-size: 0.88rem; }
+
+  .hero { padding-top: clamp(120px, 20vw, 180px); }
+  .hero h1 .dim { color: var(--text-tertiary); }
+  .hero-sub { margin-top: 24px; max-width: 560px; font-size: clamp(1.05rem, 3vw, 1.25rem); line-height: 1.55; }
+  .hero .btn { margin-top: 36px; }
+  .hero-note { margin-top: 16px; font-size: 0.84rem; color: var(--text-tertiary); }
+
+  .steps { display: grid; gap: 12px; margin-top: 8px; }
+  .step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 22px;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 34px; height: 34px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .step p { font-size: 0.92rem; margin-top: 4px; }
+
+  .includes { display: grid; gap: 10px; margin-top: 8px; }
+  .include {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 0.96rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+  }
+  .include:last-child { border-bottom: none; }
+  .include .check {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    display: grid;
+    place-items: center;
+    margin-top: 3px;
+  }
+  .include .check svg { width: 10px; height: 10px; color: var(--accent); }
+  .include strong { color: var(--text); font-weight: 600; }
+
+  .price-card {
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+    padding: clamp(28px, 5vw, 44px);
+    margin-top: 8px;
+    text-align: center;
+  }
+  .price-card .plan-name { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); }
+  .price { font-size: 3rem; font-weight: 650; letter-spacing: -0.03em; margin: 14px 0 6px; }
+  .price-card p { font-size: 0.95rem; max-width: 420px; margin: 0 auto; }
+  .price-card .btn { margin-top: 28px; width: 100%; max-width: 340px; }
+  .price-card .fine { font-size: 0.8rem; color: var(--text-tertiary); margin-top: 14px; }
+
+  .faq-list { display: grid; gap: 10px; margin-top: 8px; }
+  .faq-item { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-raised); }
+  .faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 18px 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: "+"; font-size: 1.25rem; font-weight: 400; color: var(--text-tertiary); transition: transform 0.2s ease; }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item .faq-body { padding: 0 20px 20px; font-size: 0.92rem; color: var(--text-secondary); }
+
+  .final-cta { text-align: center; padding: clamp(72px, 11vw, 128px) 24px; }
+  .final-cta p { max-width: 460px; margin: 20px auto 0; }
+  .final-cta .btn { margin-top: 32px; }
+
+  footer { border-top: 1px solid var(--border); padding: 40px 0; }
+  .disclaimer { font-size: 0.76rem; color: var(--text-tertiary); line-height: 1.7; }
+  .copyright { font-size: 0.78rem; color: var(--text-tertiary); margin-top: 20px; }
+
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal { width: 100%; max-width: 440px; background: var(--bg-raised); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 32px; }
+  .modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 10px; }
+  .modal-x { background: none; border: none; color: var(--text-tertiary); font-size: 1.6rem; line-height: 1; cursor: pointer; padding: 0; }
+  .modal-x:hover { color: var(--text); }
+  .modal p { font-size: 0.92rem; margin-bottom: 20px; }
+  .modal form { display: flex; flex-direction: column; gap: 12px; }
+  .modal input[type="email"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    padding: 14px 20px;
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+  }
+  .modal input[type="email"]:focus { border-color: var(--text-tertiary); }
+  .modal .modal-fine { font-size: 0.78rem; color: var(--text-tertiary); margin: 12px 0 0; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><span class="logo-mark"></span>Operator</a>
+    <a href="#pricing" class="btn btn-primary">Start My Financial Reset</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>Know exactly what to do next <span class="dim">with your money.</span></h1>
+    <p class="hero-sub">Upload your numbers. Our system analyzes your complete financial picture, a trained human reviews it, and you get a personalized roadmap for your next 90 days.</p>
+    <a href="#pricing" class="btn btn-primary" data-checkout>Start My Financial Reset</a>
+    <p class="hero-note">Bank-level encryption &middot; Human-reviewed &middot; No investment products, ever</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <span class="eyebrow">How It Works</span>
+    <h2>Four steps. About a week.</h2>
+    <div class="steps" style="margin-top: 32px;">
+      <div class="step"><span class="step-num">01</span><div><h3>Upload</h3><p>Securely share your statements, balances, and debts, then answer a short set of questions about your goals. About 20 minutes.</p></div></div>
+      <div class="step"><span class="step-num">02</span><div><h3>AI Analysis</h3><p>Our system maps your complete financial picture against your goals — cash flow, debt structure, savings trajectory.</p></div></div>
+      <div class="step"><span class="step-num">03</span><div><h3>Human Review</h3><p>A trained analyst reviews every report before it ships. Nothing reaches you unverified.</p></div></div>
+      <div class="step"><span class="step-num">04</span><div><h3>Personal Roadmap</h3><p>A prioritized, plain-English plan: what to do first, what to ignore, and exactly how to spend the next 90 days.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <span class="eyebrow">What You Get</span>
+    <h2>One report. Every answer.</h2>
+    <div class="includes" style="margin-top: 32px;">
+      <div class="include"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><strong>Your complete financial picture</strong> — income, debts, savings, and obligations in one clear view.</span></div>
+      <div class="include"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><strong>Debt payoff sequence</strong> — which debt to attack first, with the reasoning.</span></div>
+      <div class="include"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><strong>Big-decision answers</strong> — buy vs. rent, start the business, change jobs — based on your actual numbers.</span></div>
+      <div class="include"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><strong>Wealth blockers &amp; mistakes</strong> — what's quietly holding you back, ranked by cost.</span></div>
+      <div class="include"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><strong>90-day action plan</strong> — a week-by-week sequence of moves. No theory.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <span class="eyebrow">Pricing</span>
+    <h2>One flat price. No commissions. No upsells.</h2>
+    <div class="price-card" style="margin-top: 32px;">
+      <div class="plan-name">The Financial Reset</div>
+      <div class="price">$XXX</div>
+      <p>The complete analysis, human-reviewed, delivered in 5–7 business days.</p>
+      <a href="#" class="btn btn-primary" data-checkout>Start My Financial Reset</a>
+      <p class="fine">We sell analysis — nothing else. So our only incentive is to be right.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <span class="eyebrow">FAQ</span>
+    <h2>Fair questions. Straight answers.</h2>
+    <div class="faq-list" style="margin-top: 32px;">
+      <details class="faq-item"><summary>Is this just another budgeting app?</summary><div class="faq-body">No. Budgeting apps track what you spent. Operator analyzes your complete financial picture and tells you what to do next — the decisions, the order, and the reasoning.</div></details>
+      <details class="faq-item"><summary>Is this financial advice?</summary><div class="faq-body">Operator provides personalized financial analysis and education, not regulated investment advice. We don't sell investment products or manage money. When your situation calls for a licensed professional, we connect you with a vetted one.</div></details>
+      <details class="faq-item"><summary>Is my financial data safe?</summary><div class="faq-body">Yes. Your data is encrypted in transit and at rest, access is strictly limited, and we never sell your data. You can request full deletion at any time.</div></details>
+      <details class="faq-item"><summary>Who actually reviews my report?</summary><div class="faq-body">A trained financial analyst reviews every report before delivery — checking the analysis and signing off on every recommendation.</div></details>
+      <details class="faq-item"><summary>Do you guarantee results?</summary><div class="faq-body">No, and you should be suspicious of anyone who does. We guarantee a rigorous, human-reviewed analysis and a clear plan. Executing it is yours.</div></details>
+      <details class="faq-item"><summary>What if my finances are a mess?</summary><div class="faq-body">That's who this is for. Messy is not a disqualifier — it's the starting point.</div></details>
+    </div>
+  </div>
+</section>
+
+<div class="final-cta">
+  <h2>Stop guessing. Start operating.</h2>
+  <p>Twenty minutes of upload. One human-reviewed roadmap. A clear next 90 days.</p>
+  <a href="#pricing" class="btn btn-primary" data-checkout>Start My Financial Reset</a>
+</div>
+
+<footer>
+  <div class="container">
+    <p class="disclaimer">Operator provides personalized financial analysis and education. Operator is not a registered investment advisor, broker-dealer, law firm, or accounting firm, and does not provide investment, legal, or tax advice. We never guarantee financial results. When specialized advice is needed, we refer clients to vetted, licensed professionals.</p>
+    <p class="copyright">© 2026 Operator. All rights reserved.</p>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="capture-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-title">Join the waitlist</h3>
+      <button class="modal-x" type="button" aria-label="Close">&times;</button>
+    </div>
+    <p id="modal-copy">Checkout opens soon. Leave your email and you'll be first in line.</p>
+    <form id="capture-form">
+      <input type="email" name="email" placeholder="you@email.com" required autocomplete="email" />
+      <button class="btn btn-primary" type="submit">Put me first in line</button>
+    </form>
+    <p class="modal-fine">No spam. One email, then silence unless you ask for more.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var cfg = window.OPERATOR_CONFIG || {};
+  var overlay = document.getElementById("capture-modal");
+  var form = document.getElementById("capture-form");
+
+  function closeModal() { overlay.classList.remove("open"); }
+  overlay.addEventListener("click", function (e) { if (e.target === overlay) closeModal(); });
+  overlay.querySelector(".modal-x").addEventListener("click", closeModal);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
+  // Every CTA → the one Stripe Payment Link, else waitlist modal
+  document.querySelectorAll("[data-checkout]").forEach(function (el) {
+    if (cfg.checkoutUrl) {
+      el.href = cfg.checkoutUrl;
+    } else {
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        overlay.classList.add("open");
+        form.querySelector('input[type="email"]').focus();
+      });
+    }
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = form.email.value;
+    function done() {
+      form.innerHTML = '<p style="color: var(--text); margin: 0;">You’re on the list. Talk soon.</p>';
+    }
+    if (cfg.emailFormEndpoint) {
+      fetch(cfg.emailFormEndpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, interest: "waitlist" })
+      }).then(done).catch(done);
+    } else {
+      window.location.href = "mailto:" + (cfg.contactEmail || "") +
+        "?subject=" + encodeURIComponent("Operator waitlist") +
+        "&body=" + encodeURIComponent("Add me to the list: " + email);
+      done();
+    }
+  });
+
+  if (cfg.crispWebsiteId) {
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = cfg.crispWebsiteId;
+    var c = document.createElement("script");
+    c.src = "https://client.crisp.chat/l.js";
+    c.async = true;
+    document.head.appendChild(c);
+  }
+
+  if (cfg.plausibleDomain) {
+    var p = document.createElement("script");
+    p.src = "https://plausible.io/js/script.js";
+    p.defer = true;
+    p.setAttribute("data-domain", cfg.plausibleDomain);
+    document.head.appendChild(p);
+  }
+})();
+</script>
+
+</body>
+</html>
