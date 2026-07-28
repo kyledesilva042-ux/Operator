@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Operator — Know Exactly What to Do Next With Your Money</title>
+<meta name="description" content="Operator is an AI-assisted, human-reviewed financial operating system. Upload your numbers, get a personalized roadmap for what to do next — debt, home buying, saving, and your next 90 days." />
+<meta property="og:title" content="Operator — Know Exactly What to Do Next With Your Money" />
+<meta property="og:description" content="Not a budgeting app. Not coaching. A human-reviewed analysis of your complete financial picture, with a step-by-step roadmap." />
+<meta property="og:type" content="website" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Operator",
+  "description": "AI-assisted, human-reviewed financial operating system delivering personalized financial roadmaps.",
+  "slogan": "Know exactly what to do next with your money."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Operator Financial Reset",
+  "serviceType": "Personalized financial analysis and roadmap",
+  "provider": { "@type": "Organization", "name": "Operator" },
+  "areaServed": "US",
+  "description": "Securely upload your financial information. Our system analyzes your complete financial picture, a trained analyst reviews every report, and you receive a personalized roadmap for your next 90 days."
+}
+</script>
+<style>
+  :root {
+    --bg: #0A0A0B;
+    --bg-raised: #111113;
+    --bg-card: #16161A;
+    --border: #26262B;
+    --border-strong: #34343B;
+    --text: #F5F5F7;
+    --text-secondary: #A1A1AA;
+    --text-tertiary: #6E6E76;
+    --accent: #E8E4DC;      /* warm off-white — the "signal" color */
+    --glass: rgba(22, 22, 26, 0.72);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --radius-pill: 999px;
+    --space-section: clamp(96px, 14vw, 180px);
+    --container: 1120px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  .container {
+    width: 100%;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  h1, h2, h3 { font-weight: 600; letter-spacing: -0.03em; line-height: 1.08; }
+  h1 { font-size: clamp(2.6rem, 8.5vw, 5.25rem); }
+  h2 { font-size: clamp(2rem, 6vw, 3.5rem); }
+  h3 { font-size: clamp(1.15rem, 3vw, 1.4rem); letter-spacing: -0.02em; line-height: 1.3; }
+
+  p { color: var(--text-secondary); }
+
+  a { color: inherit; text-decoration: none; }
+
+  section { padding: var(--space-section) 0 0; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 20px;
+  }
+
+  .section-head { max-width: 720px; margin-bottom: clamp(40px, 6vw, 72px); }
+  .section-head p { margin-top: 20px; font-size: clamp(1.05rem, 2.5vw, 1.25rem); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 28px;
+    border-radius: var(--radius-pill);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--text); color: var(--bg); }
+  .btn-primary:hover { background: #FFFFFF; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-secondary:hover { border-color: var(--text-tertiary); }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+  .logo-mark {
+    width: 26px; height: 26px;
+    border: 2px solid var(--text);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+  }
+  .logo-mark::after {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--text);
+    border-radius: 2px;
+  }
+  .nav-links { display: none; gap: 32px; font-size: 0.92rem; color: var(--text-secondary); }
+  .nav-links a:hover { color: var(--text); }
+  .nav .btn { padding: 10px 20px; font-size: 0.9rem; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding-top: clamp(140px, 22vw, 220px); text-align: left; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    background: var(--bg-raised);
+  }
+  .hero-badge .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .hero h1 { max-width: 900px; }
+  .hero h1 .dim { color: var(--text-tertiary); }
+  .hero-sub {
+    margin-top: 28px;
+    max-width: 640px;
+    font-size: clamp(1.1rem, 3vw, 1.35rem);
+    line-height: 1.55;
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 40px;
+  }
+  .hero-note {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+  }
+
+  /* Hero visual: report card */
+  .hero-visual {
+    margin-top: clamp(56px, 9vw, 96px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+    padding: clamp(20px, 4vw, 40px);
+    overflow: hidden;
+  }
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .report-title { font-weight: 600; font-size: 1rem; }
+  .report-title span { color: var(--text-tertiary); font-weight: 400; display: block; font-size: 0.82rem; margin-top: 2px; }
+  .tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-strong);
+    color: var(--text-secondary);
+  }
+  .tag.reviewed { border-color: var(--accent); color: var(--accent); }
+  .report-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .report-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+  }
+  .report-item .num {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+  }
+  .report-item .action { margin-top: 6px; font-weight: 600; font-size: 0.98rem; color: var(--text); }
+  .report-item .why { margin-top: 4px; font-size: 0.85rem; color: var(--text-secondary); }
+
+  /* ---------- Problem ---------- */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .problem-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 36px);
+    background: var(--bg-raised);
+  }
+  .problem-card h3 { margin-bottom: 12px; }
+  .problem-card p { font-size: 0.98rem; }
+  .problem-statement {
+    margin-top: clamp(48px, 7vw, 80px);
+    font-size: clamp(1.4rem, 4.5vw, 2.4rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    max-width: 820px;
+    color: var(--text);
+  }
+  .problem-statement .dim { color: var(--text-tertiary); }
+
+  /* ---------- How it works ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .step {
+    padding: clamp(28px, 4vw, 40px);
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+  }
+  .step h3 { margin: 12px 0 10px; }
+  .step p { font-size: 0.96rem; max-width: 480px; }
+  .step-icon {
+    width: 44px; height: 44px;
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+    color: var(--text);
+  }
+  .step-icon svg { width: 20px; height: 20px; }
+
+  /* ---------- What's included ---------- */
+  .included-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .included-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+  }
+  .included-item .check {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    display: grid;
+    place-items: center;
+    margin-top: 2px;
+  }
+  .included-item .check svg { width: 11px; height: 11px; color: var(--accent); }
+  .included-item strong { display: block; font-weight: 600; font-size: 0.98rem; letter-spacing: -0.01em; }
+  .included-item span { font-size: 0.88rem; color: var(--text-secondary); }
+
+  /* ---------- Dashboard ---------- */
+  .dashboard {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+    padding: clamp(20px, 3.5vw, 36px);
+  }
+  .dash-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .dash-top .who { font-weight: 600; }
+  .dash-top .who span { display: block; font-size: 0.8rem; color: var(--text-tertiary); font-weight: 400; }
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .dash-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 22px;
+  }
+  .dash-label {
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .dash-value {
+    font-size: 2rem;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    margin-top: 8px;
+  }
+  .dash-value small { font-size: 0.95rem; color: var(--text-tertiary); font-weight: 500; }
+  .dash-sub { font-size: 0.83rem; color: var(--text-secondary); margin-top: 6px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+  .bar-row .bar-name { font-size: 0.83rem; width: 110px; flex-shrink: 0; color: var(--text-secondary); }
+  .bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: var(--radius-pill); }
+  .bar-row .bar-val { font-size: 0.8rem; color: var(--text-tertiary); width: 44px; text-align: right; flex-shrink: 0; }
+  .timeline { margin-top: 14px; display: grid; gap: 10px; }
+  .timeline-item { display: flex; gap: 12px; align-items: flex-start; }
+  .timeline-item .t-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--border-strong);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .timeline-item.done .t-dot { background: var(--accent); border-color: var(--accent); }
+  .timeline-item .t-text { font-size: 0.88rem; color: var(--text-secondary); }
+  .timeline-item.done .t-text { color: var(--text); }
+  .timeline-item .t-when { font-size: 0.74rem; color: var(--text-tertiary); }
+
+  /* ---------- Comparison ---------- */
+  .compare-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  .compare {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+    background: var(--bg-raised);
+    font-size: 0.92rem;
+  }
+  .compare th, .compare td {
+    padding: 18px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .compare tr:last-child td { border-bottom: none; }
+  .compare th {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .compare td { color: var(--text-secondary); }
+  .compare td:first-child { color: var(--text); font-weight: 600; }
+  .compare .op-col { background: var(--bg-card); color: var(--text); }
+  .compare th.op-col { color: var(--accent); }
+
+  /* ---------- Testimonials ---------- */
+  .quotes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .quote {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 34px);
+    background: var(--bg-raised);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .quote p { font-size: 1.02rem; color: var(--text); line-height: 1.55; }
+  .quote-who { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    display: grid;
+    place-items: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .quote-who strong { font-size: 0.92rem; display: block; }
+  .quote-who span { font-size: 0.8rem; color: var(--text-tertiary); }
+
+  /* ---------- FAQ ---------- */
+  .faq-list { display: grid; gap: 10px; max-width: 820px; }
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+    overflow: hidden;
+  }
+  .faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 20px 22px;
+    font-weight: 600;
+    font-size: 0.98rem;
+    letter-spacing: -0.01em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: "+";
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item .faq-body { padding: 0 22px 22px; font-size: 0.94rem; color: var(--text-secondary); }
+
+  /* ---------- Pricing ---------- */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .price-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+    padding: clamp(28px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .price-card.featured { border-color: var(--accent); position: relative; }
+  .price-card .plan-tag {
+    position: absolute;
+    top: -12px; left: 28px;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+  }
+  .price-card h3 { font-size: 1.1rem; }
+  .price-card .plan-desc { font-size: 0.9rem; margin-top: 6px; }
+  .price { font-size: 2.6rem; font-weight: 650; letter-spacing: -0.03em; }
+  .price small { font-size: 0.9rem; font-weight: 500; color: var(--text-tertiary); letter-spacing: 0; }
+  .price-features { display: grid; gap: 12px; font-size: 0.9rem; color: var(--text-secondary); }
+  .price-features div { display: flex; gap: 10px; align-items: flex-start; }
+  .price-features svg { width: 14px; height: 14px; color: var(--accent); flex-shrink: 0; margin-top: 4px; }
+  .price-card .btn { width: 100%; }
+
+  /* ---------- Final CTA ---------- */
+  .final-cta {
+    text-align: center;
+    padding: var(--space-section) 24px;
+    border-top: 1px solid var(--border);
+    margin-top: var(--space-section);
+  }
+  .final-cta h2 { max-width: 760px; margin: 0 auto; }
+  .final-cta p { max-width: 540px; margin: 24px auto 0; font-size: 1.1rem; }
+  .final-cta .hero-ctas { justify-content: center; margin-top: 40px; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 56px 0 40px;
+  }
+  .footer-inner { display: grid; gap: 32px; }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 24px; font-size: 0.88rem; color: var(--text-secondary); }
+  .footer-links a:hover { color: var(--text); }
+  .disclaimer {
+    font-size: 0.78rem;
+    color: var(--text-tertiary);
+    line-height: 1.7;
+    max-width: 820px;
+  }
+  .copyright { font-size: 0.8rem; color: var(--text-tertiary); }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 720px) {
+    .nav-links { display: flex; }
+    .report-grid { grid-template-columns: repeat(3, 1fr); }
+    .problem-grid { grid-template-columns: repeat(3, 1fr); }
+    .steps { grid-template-columns: repeat(4, 1fr); }
+    .step { border-bottom: none; border-right: 1px solid var(--border); }
+    .step:last-child { border-right: none; }
+    .included-list { grid-template-columns: repeat(2, 1fr); }
+    .dash-grid { grid-template-columns: repeat(3, 1fr); }
+    .dash-card.wide { grid-column: span 2; }
+    .quotes { grid-template-columns: repeat(3, 1fr); }
+    .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================= NAV ======================= -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><span class="logo-mark"></span>Operator</a>
+    <div class="nav-links">
+      <a href="#how">How It Works</a>
+      <a href="#included">What's Included</a>
+      <a href="#different">Why Operator</a>
+      <a href="#faq">FAQ</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <a href="#pricing" class="btn btn-primary">Start My Financial Reset</a>
+  </div>
+</nav>
+
+<!-- ======================= HERO ======================= -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge"><span class="dot"></span>Every report reviewed by a trained human analyst</div>
+    <h1>Know exactly what to do next <span class="dim">with your money.</span></h1>
+    <p class="hero-sub">Operator is an AI-assisted, human-reviewed financial operating system: upload your numbers, and get a personalized roadmap showing the exact moves that take you toward financial freedom.</p>
+    <div class="hero-ctas">
+      <a href="#pricing" class="btn btn-primary">Start My Financial Reset</a>
+      <a href="#dashboard" class="btn btn-secondary">See a Sample Report</a>
+    </div>
+    <p class="hero-note">Bank-level encryption &middot; Your data is never sold &middot; No investment products, ever</p>
+
+    <div class="hero-visual" aria-label="Sample Operator roadmap preview">
+      <div class="report-header">
+        <div class="report-title">Your 90-Day Roadmap<span>Prepared for J. Alvarez &middot; Reviewed &amp; approved</span></div>
+        <div style="display:flex; gap:8px;">
+          <span class="tag">AI Analysis</span>
+          <span class="tag reviewed">Human Reviewed ✓</span>
+        </div>
+      </div>
+      <div class="report-grid">
+        <div class="report-item">
+          <div class="num">Priority 01</div>
+          <div class="action">Kill the 24.9% card first</div>
+          <div class="why">It's costing you $214/mo — more than your other three debts combined.</div>
+        </div>
+        <div class="report-item">
+          <div class="num">Priority 02</div>
+          <div class="action">Pause the house search — for 8 months</div>
+          <div class="why">You're closer than you think. Here's the exact gap and how to close it.</div>
+        </div>
+        <div class="report-item">
+          <div class="num">Priority 03</div>
+          <div class="action">Redirect $390/mo you didn't know you had</div>
+          <div class="why">Three recurring costs are working against your stated goals.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======================= PROBLEM ======================= -->
+<section id="problem">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">The Problem</span>
+      <h2>You don't have a discipline problem. You have a clarity problem.</h2>
+      <p>You make decent money. You work hard. And you still lie awake wondering if you're doing this right — because nothing you've tried actually looks at <em>your</em> situation.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <h3>Budgeting apps track the past.</h3>
+        <p>They tell you what you spent on takeout last month. They never tell you whether to pay off the card, save for the house, or fund the business. Categorizing transactions isn't a strategy.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Finance content is generic.</h3>
+        <p>Every influencer has a rule: 50/30/20, snowball, avalanche, "just invest the difference." None of them have seen your numbers. Advice built for everyone is built for no one.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Advisors want your assets, not your questions.</h3>
+        <p>Traditional advisors are built for people who already have wealth to manage. You need direction on how to build it — and that conversation is hard to buy anywhere.</p>
+      </div>
+    </div>
+    <p class="problem-statement">You don't need another finance influencer. <span class="dim">You need someone to look at your actual numbers and tell you what to do next.</span></p>
+  </div>
+</section>
+
+<!-- ======================= HOW IT WORKS ======================= -->
+<section id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">How It Works</span>
+      <h2>From uploaded documents to a decision-ready roadmap.</h2>
+      <p>Four steps. About a week. No meetings required.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="step-num">Step 01</div>
+        <h3>Upload</h3>
+        <p>Securely share your statements, balances, income, and debts — then answer a short set of questions about your goals and situation. Takes about 20 minutes.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg>
+        </div>
+        <div class="step-num">Step 02</div>
+        <h3>AI Analysis</h3>
+        <p>Our proprietary system maps your complete financial picture — cash flow, debt structure, savings trajectory, risk exposure — against your stated goals.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="step-num">Step 03</div>
+        <h3>Human Review</h3>
+        <p>A trained analyst reviews every report before it ships — checking the logic, catching what models miss, and making sure every recommendation holds up.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <div class="step-num">Step 04</div>
+        <h3>Personal Roadmap</h3>
+        <p>You get a prioritized, plain-English plan: what to do first, what to ignore, and exactly how to spend the next 90 days.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= WHAT'S INCLUDED ======================= -->
+<section id="included">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">What's Included</span>
+      <h2>Every Financial Reset ships with all of this.</h2>
+    </div>
+    <div class="included-list">
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>Complete Financial Picture Report</strong><span>Your income, debts, savings, and obligations mapped into one clear view — many clients see it assembled for the first time.</span></div>
+      </div>
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>Debt Payoff Sequence</strong><span>Which debt to attack first, second, and third — with the reasoning, not just the order.</span></div>
+      </div>
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>Big Decision Readiness Assessments</strong><span>Straight answers on the questions you're actually asking: buy vs. rent, start the business, change jobs.</span></div>
+      </div>
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>Wealth Blockers Analysis</strong><span>The specific habits, structures, and costs quietly preventing you from building wealth — named and quantified.</span></div>
+      </div>
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>Savings &amp; Cash Flow Audit</strong><span>Whether you're saving enough for your goals — and where redirected dollars would work harder.</span></div>
+      </div>
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>90-Day Action Plan</strong><span>A prioritized, week-by-week sequence of moves. No theory. Just what to do next.</span></div>
+      </div>
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>Mistake Report</strong><span>The financial errors you're currently making, ranked by what they're costing you.</span></div>
+      </div>
+      <div class="included-item">
+        <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div><strong>Specialist Referrals When Needed</strong><span>If your situation calls for a CPA, attorney, or licensed advisor, we connect you with a vetted professional.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SAMPLE DASHBOARD ======================= -->
+<section id="dashboard">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Sample Report</span>
+      <h2>Your entire financial life, finally in one place.</h2>
+      <p>A live view of the roadmap, your progress, and what's next — updated as you complete each move.</p>
+    </div>
+    <div class="dashboard" aria-label="Sample Operator dashboard">
+      <div class="dash-top">
+        <div class="who">Financial Operating View<span>Sample client &middot; Reviewed 4 days ago</span></div>
+        <span class="tag reviewed">Roadmap Active</span>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="dash-label">Position Score</div>
+          <div class="dash-value">64<small>/100</small></div>
+          <div class="dash-sub">Up 9 points since your Reset. Strong income, debt structure holding you back.</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Monthly Free Cash Flow</div>
+          <div class="dash-value">$1,240</div>
+          <div class="dash-sub">$390/mo recovered from the cash flow audit.</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Next Milestone</div>
+          <div class="dash-value">House-Ready</div>
+          <div class="dash-sub">Est. 8 months at current pace.</div>
+        </div>
+        <div class="dash-card wide">
+          <div class="dash-label">Debt Payoff Sequence</div>
+          <div class="bar-row"><span class="bar-name">Card &middot; 24.9%</span><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><span class="bar-val">72%</span></div>
+          <div class="bar-row"><span class="bar-name">Card &middot; 19.2%</span><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><span class="bar-val">18%</span></div>
+          <div class="bar-row"><span class="bar-name">Auto loan</span><div class="bar-track"><div class="bar-fill" style="width:41%"></div></div><span class="bar-val">41%</span></div>
+          <div class="bar-row"><span class="bar-name">Student loan</span><div class="bar-track"><div class="bar-fill" style="width:9%"></div></div><span class="bar-val">9%</span></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">This Week</div>
+          <div class="timeline">
+            <div class="timeline-item done"><span class="t-dot"></span><div><div class="t-text">Cancel duplicate coverage</div><div class="t-when">Done &middot; saves $68/mo</div></div></div>
+            <div class="timeline-item done"><span class="t-dot"></span><div><div class="t-text">Move emergency fund to HYSA</div><div class="t-when">Done</div></div></div>
+            <div class="timeline-item"><span class="t-dot"></span><div><div class="t-text">Extra $500 to the 24.9% card</div><div class="t-when">Due Friday</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= WHY OPERATOR IS DIFFERENT ======================= -->
+<section id="different">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Why Operator</span>
+      <h2>Everything else answers the wrong question.</h2>
+    </div>
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th></th>
+            <th>What they do</th>
+            <th>What they can't do</th>
+            <th class="op-col">Operator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Budgeting apps</td>
+            <td>Track and categorize what you already spent.</td>
+            <td>Tell you which decision to make next.</td>
+            <td class="op-col">Analyzes your full picture and hands you a prioritized plan.</td>
+          </tr>
+          <tr>
+            <td>Credit repair</td>
+            <td>Dispute items on your credit report.</td>
+            <td>Fix the structure that created the problem.</td>
+            <td class="op-col">Addresses the root causes across your entire financial life.</td>
+          </tr>
+          <tr>
+            <td>Financial advisors</td>
+            <td>Manage portfolios for people with assets.</td>
+            <td>Serve you before you have wealth to manage.</td>
+            <td class="op-col">Built for the building phase — no minimums, nothing sold to you.</td>
+          </tr>
+          <tr>
+            <td>AI chatbots</td>
+            <td>Generate generic answers from generic data.</td>
+            <td>Verify anything, or stand behind it.</td>
+            <td class="op-col">AI does the heavy analysis; a trained human reviews every report before you see it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TESTIMONIALS ======================= -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Clients</span>
+      <h2>"I finally found adults."</h2>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <p>"I make $95K and always felt like I was failing at money anyway. Operator showed me I was actually making three specific mistakes — and exactly what order to fix them in. The clarity alone was worth it."</p>
+        <div class="quote-who">
+          <span class="avatar">DM</span>
+          <div><strong>Darius M., 29</strong><span>Software engineer, Atlanta</span></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p>"I'd been agonizing over buying a house for two years. My report said: not yet, here's the gap, here's the 8-month path to close it. Nobody had ever just answered the question before."</p>
+        <div class="quote-who">
+          <span class="avatar">KT</span>
+          <div><strong>Kayla T., 31</strong><span>Nurse practitioner, Phoenix</span></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p>"What sold me was the human review. It doesn't read like a robot printout — it reads like someone smart actually sat with my numbers. My 90-day plan is taped above my desk."</p>
+        <div class="quote-who">
+          <span class="avatar">JR</span>
+          <div><strong>James R., 26</strong><span>Sales manager, Chicago</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= FAQ ======================= -->
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>Fair questions. Straight answers.</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item"><summary>Is this just another budgeting app?</summary><div class="faq-body">No. Budgeting apps track what you spent. Operator analyzes your complete financial picture and tells you what to do next — the decisions, the order, and the reasoning.</div></details>
+      <details class="faq-item"><summary>Is this financial advice?</summary><div class="faq-body">Operator provides personalized financial analysis and education, not regulated investment advice. We don't sell investment products or manage money. When your situation calls for a licensed professional — a CPA, attorney, or fiduciary advisor — we connect you with a vetted one.</div></details>
+      <details class="faq-item"><summary>How is this different from a financial advisor?</summary><div class="faq-body">Most advisors are built for people who already have assets to manage, and are compensated accordingly. Operator is built for the building phase: no asset minimums, no products to sell you, and a flat, transparent price.</div></details>
+      <details class="faq-item"><summary>Is my financial data safe?</summary><div class="faq-body">Yes. Your data is encrypted in transit and at rest with bank-level security, access is strictly limited, and we never sell your data. You can request full deletion at any time.</div></details>
+      <details class="faq-item"><summary>Who actually reviews my report?</summary><div class="faq-body">A trained financial analyst on our team reviews every report before delivery — checking the analysis, correcting anything the model got wrong, and signing off on every recommendation.</div></details>
+      <details class="faq-item"><summary>What if AI gets something wrong about my situation?</summary><div class="faq-body">That's exactly why the human review exists. Nothing reaches you without an analyst verifying it against your actual documents and stated goals.</div></details>
+      <details class="faq-item"><summary>What do I need to upload?</summary><div class="faq-body">Typically: recent bank and card statements, debt balances and rates, income information, and any savings or retirement balances. The intake takes about 20 minutes, and we guide you through every step.</div></details>
+      <details class="faq-item"><summary>How long does it take to get my report?</summary><div class="faq-body">Most reports are delivered within 5–7 business days of completing your intake.</div></details>
+      <details class="faq-item"><summary>What if my finances are a mess?</summary><div class="faq-body">That's who this is for. Messy is not a disqualifier — it's the starting point. The bigger the tangle, the more valuable the map.</div></details>
+      <details class="faq-item"><summary>What if I don't make much money?</summary><div class="faq-body">Operator works at any income. The roadmap is built around your actual numbers, not a hypothetical high earner's.</div></details>
+      <details class="faq-item"><summary>Do you guarantee results?</summary><div class="faq-body">No, and you should be suspicious of anyone who does. We guarantee a rigorous, human-reviewed analysis and a clear plan. Executing it is yours.</div></details>
+      <details class="faq-item"><summary>Will you tell me to stop buying coffee?</summary><div class="faq-body">No. We don't do lectures. If a spending pattern is materially blocking your goals, we'll quantify it and show you. Small pleasures are not your problem.</div></details>
+      <details class="faq-item"><summary>Can Operator help me decide whether to buy a house?</summary><div class="faq-body">Yes — it's one of the most common questions we answer. You'll get a readiness assessment based on your actual numbers, plus the specific path to "ready" if you're not there yet.</div></details>
+      <details class="faq-item"><summary>Can it help me decide whether to start a business?</summary><div class="faq-body">Yes. We'll show you what your finances can support, what runway you'd need, and what to shore up first — so the decision is grounded in numbers, not nerves.</div></details>
+      <details class="faq-item"><summary>Is this credit repair?</summary><div class="faq-body">No. We don't dispute items on your credit report. We address the underlying structure — debt, cash flow, habits — that determines your financial health, credit included.</div></details>
+      <details class="faq-item"><summary>Do you sell investments or insurance?</summary><div class="faq-body">Never. We have no products, no commissions, and no incentive to steer you anywhere. You pay for analysis, and analysis is all we sell.</div></details>
+      <details class="faq-item"><summary>What happens after the 90 days?</summary><div class="faq-body">Many clients run a follow-up Reset to re-map their position and set the next 90 days. Others take the roadmap and run. Both are wins.</div></details>
+      <details class="faq-item"><summary>Do I have to talk to anyone on the phone?</summary><div class="faq-body">No. The entire process is async — upload, answer questions, receive your report. Plans that include a walkthrough call make it optional.</div></details>
+      <details class="faq-item"><summary>What if I disagree with a recommendation?</summary><div class="faq-body">Every recommendation comes with its reasoning, so you can pressure-test it. You can also submit questions about your report and get a reviewed response.</div></details>
+      <details class="faq-item"><summary>Why wouldn't I just ask a free AI chatbot?</summary><div class="faq-body">You can — and it will give you a confident, generic answer without ever verifying your numbers. Operator's analysis is built from your actual documents and reviewed by a trained human who is accountable for what ships.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PRICING ======================= -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>One flat price. No commissions. No upsells.</h2>
+      <p>We sell analysis — nothing else. So our only incentive is to be right.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div>
+          <h3>The Snapshot</h3>
+          <p class="plan-desc">Answers to one big financial question.</p>
+        </div>
+        <div class="price">$XX</div>
+        <div class="price-features">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>One decision assessment (house, debt, business, etc.)</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Core financial picture summary</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Human-reviewed before delivery</div>
+        </div>
+        <a href="#" class="btn btn-secondary">Start My Financial Reset</a>
+      </div>
+      <div class="price-card featured">
+        <span class="plan-tag">Most Popular</span>
+        <div>
+          <h3>The Full Reset</h3>
+          <p class="plan-desc">The complete financial operating system.</p>
+        </div>
+        <div class="price">$XXX</div>
+        <div class="price-features">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in The Snapshot</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Complete financial picture report</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Debt payoff sequence &amp; wealth blockers analysis</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>90-day action plan</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Report Q&amp;A included</div>
+        </div>
+        <a href="#" class="btn btn-primary">Start My Financial Reset</a>
+      </div>
+      <div class="price-card">
+        <div>
+          <h3>Reset + Review</h3>
+          <p class="plan-desc">The Full Reset, plus a quarterly re-map.</p>
+        </div>
+        <div class="price">$XXX<small>/quarter</small></div>
+        <div class="price-features">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in The Full Reset</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly position re-analysis</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Updated 90-day plan each quarter</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Optional walkthrough call</div>
+        </div>
+        <a href="#" class="btn btn-secondary">Start My Financial Reset</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= FINAL CTA ======================= -->
+<div class="final-cta">
+  <h2>Stop guessing. Start operating.</h2>
+  <p>Twenty minutes of upload. One human-reviewed roadmap. A clear next 90 days.</p>
+  <div class="hero-ctas">
+    <a href="#pricing" class="btn btn-primary">Start My Financial Reset</a>
+    <a href="#dashboard" class="btn btn-secondary">See a Sample Report</a>
+  </div>
+</div>
+
+<!-- ======================= FOOTER ======================= -->
+<footer>
+  <div class="container footer-inner">
+    <a href="#" class="logo"><span class="logo-mark"></span>Operator</a>
+    <div class="footer-links">
+      <a href="#how">How It Works</a>
+      <a href="#included">What's Included</a>
+      <a href="#faq">FAQ</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+    </div>
+    <p class="disclaimer">Operator provides personalized financial analysis and education. Operator is not a registered investment advisor, broker-dealer, law firm, or accounting firm, and does not provide investment, legal, or tax advice. We never guarantee financial results. When specialized advice is needed, we refer clients to vetted, licensed professionals. Individual outcomes depend on your circumstances and your execution of the plan.</p>
+    <p class="copyright">© 2026 Operator. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
