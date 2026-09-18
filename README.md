@@ -10,15 +10,17 @@ A complete, static, zero-build business website: marketing site, sample delivera
 
 | File | What it is |
 |---|---|
-| `index.html` | The full marketing site — 10 sections, 3 plans, comparison table, 20 FAQs. |
+| `index.html` | The marketing site — two tiers, comparison table, FAQs. |
 | `mvp.html` | A stripped-down one-pager. Swap it in as your index if the long page feels premature. |
-| `sample-report.html` | A complete sample deliverable. Your strongest sales asset **and** the template you copy for each client. |
-| `intake.html` | The post-payment client questionnaire. Five steps, saves progress, works without any third-party service. |
-| `thanks.html` | Where Stripe sends buyers. Routes them into the intake. |
+| `assets/engine.js` | **The analysis engine.** All the math: cash flow, position score, leak detection, debt payoff simulation, the 90-day plan. Pure functions, no network. |
+| `report.html` | The generated instant review — the $29 product. Renders `engine.js` output and sells the upgrade at the bottom. |
+| `intake.html` | Post-payment questionnaire. Five steps, saves progress, feeds the engine. |
+| `thanks.html` | Where Stripe sends buyers. Records the payment and routes them into the intake. |
+| `sample-report.html` | Example of the $199 human report. Also the template you copy per client. |
 | `legal.html` | Terms, privacy, refunds, regulatory disclosure. Payment processors ask for this. |
 | `404.html` | — |
 | `config.js` | **Every setting on the site.** One file. |
-| `assets/site.css`, `assets/site.js` | Shared styles and wiring for the sub-pages. |
+| `assets/site.css`, `assets/report.css`, `assets/site.js` | Shared styles and wiring. |
 | `netlify.toml`, `vercel.json` | Deploy config for either host. No build step. |
 | `DELIVERABLES.md` | Copy variants, wireframes, palette, typography, SEO notes. |
 
@@ -27,8 +29,8 @@ A complete, static, zero-build business website: marketing site, sample delivera
 Everything in `config.js` is optional except these:
 
 ```js
-checkout:     { fullReset: "https://buy.stripe.com/..." },  // to take money
-contactEmail: "you@yourdomain.com"                          // where everything falls back
+checkout:     { instant: "https://buy.stripe.com/..." },  // to take money
+contactEmail: "you@yourdomain.com"                        // where everything falls back
 ```
 
 Leave anything else empty and it degrades quietly: no Stripe link → CTAs capture emails; no form endpoint → the intake shows a copy-and-email summary; no analytics key → no analytics script loads. Nothing in `config.js` is a secret — every value is a public URL or a public site ID, safe to commit.
@@ -36,11 +38,17 @@ Leave anything else empty and it degrades quietly: no Stripe link → CTAs captu
 ## How the money path works
 
 ```
-index.html  →  Stripe Payment Link  →  thanks.html  →  intake.html  →  your inbox
-                                       (set as Stripe's post-payment redirect)
+index.html → Stripe ($29) → thanks.html → intake.html → report.html
+                            (Stripe's         (records      (generated
+                             redirect          payment)      instantly)
+                             target)                             │
+                                                                 ▼
+                                              Stripe ($199) → thanks.html?upgrade=1
 ```
 
-Set that redirect in Stripe. It's the one step that connects a payment to a client you can actually serve.
+Set both redirects in Stripe. They're the steps that connect a payment to a product the customer can actually reach.
+
+**The instant review costs you nothing to deliver.** `engine.js` computes it in the customer's browser — no server, no API key, no per-report cost. It also cannot invent a number: every figure traces back to something the customer typed. That property is what makes it honest to sell as instant, and it's why the report says plainly that no person has read it. Judgment is what the $199 tier sells; keep that line where it is.
 
 ## Deploying
 
@@ -49,6 +57,7 @@ Drag the folder onto [app.netlify.com/drop](https://app.netlify.com/drop) for an
 ## Editing
 
 - **Prices** → `config.js` → `prices`. They render everywhere automatically.
+- **The analysis logic** → `assets/engine.js`. Every threshold and rule is commented with why it's set where it is.
 - **Design tokens** → `:root` at the top of `assets/site.css` (and inside `index.html` / `mvp.html`, which stay deliberately self-contained so either can be hosted as a single file).
 - **Renaming the business** → `brandName` in `config.js` covers the sub-pages; `index.html` and `mvp.html` need a find-and-replace on "Operator".
 

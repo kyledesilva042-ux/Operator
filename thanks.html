@@ -7,6 +7,8 @@
 <meta name="robots" content="noindex" />
 <link rel="stylesheet" href="assets/site.css" />
 <script src="config.js"></script>
+<!-- Stripe's post-payment redirect target. Its one job is to record the
+     payment in this browser and move the client straight into the intake. -->
 <style>
   .hero-thanks { text-align: center; max-width: 620px; margin: 0 auto; }
   .seal { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: var(--bg); display: grid; place-items: center; margin: 0 auto 28px; }
@@ -26,37 +28,63 @@
 <div class="page">
 <div class="container narrow">
 
-  <div class="hero-thanks">
-    <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <h1>You're in.</h1>
-    <p style="margin-top:16px; font-size:1.05rem">Your receipt is on its way. There's one more step, and it's the one that makes your report worth reading.</p>
-    <a href="intake.html" data-intake class="btn btn-primary" style="margin-top:32px">Fill out my intake →</a>
-    <p class="muted" style="margin-top:14px">About 15 minutes. No logins, no account numbers.</p>
+  <!-- ============ instant tier (default) ============ -->
+  <div id="instant">
+    <div class="hero-thanks">
+      <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h1>You're in. Let's go.</h1>
+      <p style="margin-top:16px; font-size:1.05rem">Ten minutes of questions and your review is on screen. Nothing gets emailed, nothing gets queued — you'll be reading it before you finish your coffee.</p>
+      <a href="intake.html" data-intake class="btn btn-primary" style="margin-top:32px">Start my intake →</a>
+      <p class="muted" style="margin-top:14px">No logins, no account numbers, no SSN. Round numbers are fine.</p>
+    </div>
+
+    <div class="card next-card">
+      <span class="eyebrow">Before you start</span>
+      <div class="steps" style="margin-top:22px">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div><h3>Have your debts handy</h3><p style="font-size:0.9rem; margin-top:4px">Balance and interest rate for each one. The rate is what decides your payoff order, so it's the single most valuable thing to get right. A card statement or a banking app has both.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div><h3>Know your employer match</h3><p style="font-size:0.9rem; margin-top:4px">What percentage you contribute, and what your employer matches up to. Two minutes on your benefits portal. This is where we most often find money you're leaving behind.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div><h3>Don't agonize over estimates</h3><p style="font-size:0.9rem; margin-top:4px">If you're unsure on a spending line, guess high. We'd rather find good news later than build a plan on numbers that were too kind.</p></div>
+        </div>
+      </div>
+      <hr class="divider" />
+      <p style="font-size:0.9rem">Your answers save as you go, so you can close this and come back on the same device. Something wrong with your order? Email <a data-email href="#" style="color:var(--accent)"></a> and a person will answer.</p>
+    </div>
   </div>
 
-  <div class="card next-card">
-    <span class="eyebrow">What happens next</span>
-    <div class="steps" style="margin-top:22px">
-      <div class="step done">
-        <div class="step-n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div><h3>Payment</h3><p style="font-size:0.9rem; margin-top:4px">Done. Receipt is in your inbox.</p></div>
-      </div>
-      <div class="step">
-        <div class="step-n">2</div>
-        <div><h3>Your intake — today, ideally</h3><p style="font-size:0.9rem; margin-top:4px">The numbers and the context. Your clock starts when this lands, so the sooner you send it, the sooner you get the report.</p></div>
-      </div>
-      <div class="step">
-        <div class="step-n">3</div>
-        <div><h3>Analysis &amp; human review</h3><p style="font-size:0.9rem; margin-top:4px">Your full picture gets modeled, then a person reads every line before it goes out. If something in your intake doesn't add up, we email you rather than guess.</p></div>
-      </div>
-      <div class="step">
-        <div class="step-n">4</div>
-        <div><h3>Your roadmap arrives</h3><p style="font-size:0.9rem; margin-top:4px">Within <span data-turnaround="fullReset">5 business days</span> of your intake (<span data-turnaround="snapshot">2 business days</span> for a Snapshot). Reply to it with questions — that's included.</p></div>
-      </div>
+  <!-- ============ human review upgrade ============ -->
+  <div id="upgrade" style="display:none">
+    <div class="hero-thanks">
+      <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h1>Human review booked.</h1>
+      <p style="margin-top:16px; font-size:1.05rem">Your intake is already on file — there's nothing else to fill in. A person is reading your full picture now.</p>
     </div>
-    <hr class="divider" />
-    <p style="font-size:0.9rem">Want to see the shape of what you're getting? <a href="sample-report.html" data-sample style="color:var(--accent)">Read a full sample report</a>.</p>
-    <p style="font-size:0.9rem; margin-top:10px">Something wrong with your order? Email <a data-email href="#" style="color:var(--accent)"></a> and a human will answer.</p>
+    <div class="card next-card">
+      <span class="eyebrow">What happens next</span>
+      <div class="steps" style="margin-top:22px">
+        <div class="step done">
+          <div class="step-n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><h3>Your numbers</h3><p style="font-size:0.9rem; margin-top:4px">Already submitted with your instant review.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div><h3>Questions, if we have them</h3><p style="font-size:0.9rem; margin-top:4px">If something doesn't add up or the form missed context that matters, we email you rather than guess. Replying quickly keeps your clock running.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div><h3>Your written plan</h3><p style="font-size:0.9rem; margin-top:4px">Within <span data-turnaround="humanReview">5 business days</span>, by email — including a straight answer on the decision you asked about. Reply with questions for 30 days; that's included.</p></div>
+        </div>
+      </div>
+      <hr class="divider" />
+      <p style="font-size:0.9rem">Want to see the format? <a href="sample-report.html" data-sample style="color:var(--accent)">Read a full sample report</a>. Questions: <a data-email href="#" style="color:var(--accent)"></a>.</p>
+    </div>
   </div>
 
 </div>
@@ -71,6 +99,19 @@
     <p class="copyright">© <span data-year>2026</span> <span data-brand>Operator</span>. All rights reserved.</p>
   </div>
 </footer>
+
 <script src="assets/site.js"></script>
+<script>
+(function () {
+  // Record the payment for this browser so intake.html opens straight up.
+  try { localStorage.setItem("operator_paid_v1", "1"); } catch (e) {}
+
+  // The human-review Stripe link redirects here with ?upgrade=1
+  if (/[?&]upgrade=1/.test(location.search)) {
+    document.getElementById("instant").style.display = "none";
+    document.getElementById("upgrade").style.display = "";
+  }
+})();
+</script>
 </body>
 </html>

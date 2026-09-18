@@ -8,23 +8,43 @@ Everything here is written to be done in one morning. The site is finished; what
 
 ## Before you start: two decisions
 
-1. **Your price.** The site ships at $149 / $349 / $249-per-quarter. For your first five clients, consider a **founding price of $149 for the Full Reset** — you want reviews, testimonials, and reps more than you want $349 right now. Change `prices` in `config.js` and create your Stripe link at the matching amount.
+1. **Your price.** The site ships at **$29** for the instant review and **$199** for human review. The $29 is deliberately an impulse buy — low enough that nobody has to think about it, which is the entire point when nobody has heard of you. The margin is in the upgrade. Change `prices` in `config.js` and create your Stripe links at matching amounts.
 2. **Your name and inbox.** A Gmail address works for day one. `hello@yourdomain.com` works better and takes ten minutes once you own a domain.
 
 ---
 
 ## Hour 1 — Get paid
 
-### 1. Stripe (25 min)
-1. Create an account at stripe.com. Use your legal name / LLC if you have one; a sole proprietorship with your SSN is fine to start in the US.
-2. **Payment Links → New link → One-off product.**
-   - Name: `The Full Reset` · Price: your number · Description: "A complete, human-reviewed analysis of your financial position with a 90-day action plan."
-   - Under **After payment → Redirect customers to a page you host**, set: `https://yourdomain.com/thanks.html`
-     *(You'll have the URL after Hour 2 — come back and fill it in. This is the step everyone forgets, and it's the one that gets clients into your intake form.)*
-3. Copy the `buy.stripe.com/...` URL into `checkout.fullReset` in `config.js`.
-4. Repeat for the other two plans if you want all three live. **You don't need to.** One product sells better than three when nobody knows you yet.
+### 1. Stripe (30 min)
 
-> **Expect a review.** Stripe often flags financial-services businesses for a short verification. They ask for a working website with visible terms, a refund policy, and a real contact address — which is exactly why `legal.html` exists. Deploy before you apply, and answer their questions the same day. Also: your first payout typically lands **2–7 days** after your first charge, not instantly. The sale happens tomorrow; the deposit follows.
+You need **two** Payment Links.
+
+1. Create an account at stripe.com. Use your legal name / LLC if you have one; a US sole proprietorship with your SSN is fine to start.
+2. **Payment Links → New link → One-off product.**
+
+   **Link A — Instant Review**
+   - Name: `Instant Review` · Price: `$29`
+   - Description: "Your complete financial position, computed and on screen in about ten minutes."
+   - **After payment → Redirect customers to a page you host:** `https://yourdomain.com/thanks.html`
+   - Paste the URL into `checkout.instant` in `config.js`
+
+   **Link B — Human Review & Planning**
+   - Name: `Human Review & Planning` · Price: `$199`
+   - Description: "A person reads your complete picture and answers the decision you're actually facing."
+   - **Redirect to:** `https://yourdomain.com/thanks.html?upgrade=1`  ← the `?upgrade=1` matters; it switches the page to the right message
+   - Paste the URL into `checkout.humanReview` in `config.js`
+
+**The redirects are the step everyone forgets, and they're the step that makes the whole thing work.** `thanks.html` is what records the payment in the customer's browser and unlocks the intake. Without it they pay and hit a wall.
+
+> **Expect a Stripe review.** Financial-services businesses often get flagged for a short verification. They want a working website with visible terms, a refund policy, and a real contact address — which is exactly why `legal.html` exists. Deploy before you apply, and answer their questions the same day. Also: your first payout typically lands **2–7 days** after your first charge, not instantly.
+
+### About the paywall — read this before you launch
+
+`intake.html` checks for a flag that `thanks.html` sets after checkout. **This is a courtesy gate, not access control.** Anyone who knows how to open a browser console or type a URL can skip it. That's a deliberate day-one tradeoff: real gating needs a server, and a server needs to exist before it can be written.
+
+It's fine, and here's why: the people who bypass a $29 paywall were never going to pay $29. It costs you nothing per report, and it will not lose you meaningful revenue.
+
+**When you want real verification** (worth doing once you're past a few dozen sales): add a Netlify/Vercel function that takes the `session_id` Stripe appends to your redirect URL, calls `stripe.checkout.sessions.retrieve()` with your **secret** key server-side, and returns a signed token the intake checks. Roughly 40 lines. Your secret key must never appear in `config.js` or anywhere else in this repo.
 
 ### 2. Formspree (10 min, free)
 Create **two** forms at formspree.io:
@@ -52,11 +72,16 @@ Skip this and the intake page still works — it shows the client a formatted su
 Use Stripe's test mode, or buy from yourself and refund it:
 
 - [ ] Homepage loads, prices show your real numbers
-- [ ] "Start My Financial Reset" → Stripe checkout opens
+- [ ] "Get my review" → Stripe checkout opens
 - [ ] Pay → lands on `/thanks.html`
-- [ ] "Fill out my intake" → `/intake.html` works on your **phone**
-- [ ] Submit the intake → it reaches your inbox
-- [ ] Sample report reads well and prints to PDF cleanly
+- [ ] "Start my intake" → `/intake.html` opens (the paywall is satisfied)
+- [ ] Fill the intake **with your own real numbers** on your **phone**
+- [ ] Submit → the report renders immediately, and the figures are right
+- [ ] Check the math yourself against a calculator on at least one client
+- [ ] "Save as PDF" produces a clean document
+- [ ] The $199 upgrade button at the bottom opens the second Stripe link
+- [ ] That link redirects to `/thanks.html?upgrade=1` and shows the upgrade message
+- [ ] The intake copy reaches your Formspree inbox
 - [ ] Every footer link goes somewhere real
 
 ---
@@ -91,26 +116,38 @@ Not ads. Not SEO — that's a six-month instrument. Your first clients are peopl
 >
 > First five are $149 while I build up reviews. Comment or DM.
 
+### What the funnel actually does for you
+
+At $29 the instant review is not really the business — it's the thing that turns a stranger into a customer for the price of a sandwich, and hands them a document with your name on it that is genuinely useful. Some fraction upgrade. Some tell a friend. All of them have now seen your work instead of your marketing.
+
+So optimize for **volume into the $29**, not for conversion to $199. Ten instant reviews beats one nagging email about a $199 upgrade, every time.
+
 ### A realistic day one
 Twenty real conversations → two or three genuinely interested → **one sale is a good day.** One sale is not a small thing: it's proof the whole loop works, plus a testimonial, plus a person who talks about you. Ten DMs and zero sales isn't failure either — it's a signal to fix the pitch or change the room. Keep going for a week before you conclude anything.
 
 ---
 
-## Fulfillment: how you actually deliver
+## Fulfillment: the instant tier delivers itself
 
-You promised a report. Here's how to produce one in about 90 minutes.
+That's the point of it. `assets/engine.js` computes the review in the customer's browser: no server, no API key, nothing for you to do, and zero marginal cost per sale. You could sell a hundred tonight while asleep.
 
-1. **Copy `sample-report.html`** to `report-clientname.html`. That file is your template — the structure, the order, and the voice are all already decided. You're filling in numbers and writing four or five paragraphs of judgment.
-2. **Work the intake in this order.** Income → fixed costs → what's cuttable → debts sorted by rate → the one question they asked. The report is organized in that order because the analysis is.
-3. **Find at least three specific things.** Not "spend less on food" — *"$180/month in subscriptions you listed as 'not sure what that is.'"* Specificity is the entire product. Vague advice is what they already had for free.
-4. **Answer their actual question in Section 1**, plainly, in the first two sentences. Even when the answer is "not yet, and here's when."
-5. **Write Section 5 — what you're NOT doing.** It's the section that makes you sound like a professional instead of a blog. It's also where you protect them from getting sold something.
-6. **Say when it's out of your lane.** Wills, taxes, student loan forgiveness → refer out, take no fee. This keeps you on the right side of the line *and* is the thing clients tell their friends about.
-7. **Read it out loud once**, print to PDF, email it. That read-aloud pass is the "human review" you advertised. Actually do it.
+**What it does:** real cash flow, a position score with every component broken out, leak detection with dollar figures, debt payoff ordering with a month-by-month simulation of interest and time saved, employer-match and tax-withholding checks, a sequenced 90-day plan, and referral flags for anything needing a licensed professional.
 
-Then: wait two weeks, email them one line — *"How's week two going?"* That email is where your repeat revenue and your referrals come from.
+**What it deliberately does not do:** exercise judgment, ask a follow-up question, or weigh two goals against each other. The report says so plainly in Section 8, which is also where the upgrade sits. That honesty *is* the sales pitch — don't soften it.
 
----
+## Fulfillment: how you deliver human review
+
+About 90 minutes per client.
+
+1. **Open their intake.** It arrives in your Formspree inbox with a readable summary, and their instant review already tells you the arithmetic. You're not starting from a blank page — you're starting from a finished analysis that needs judgment added.
+2. **Copy `sample-report.html`** to `report-clientname.html`. That's your template; the structure and voice are already decided.
+3. **Answer their actual question in Section 1**, plainly, in the first two sentences. Even when the answer is "not yet, and here's when."
+4. **Find the things the engine couldn't.** This is what they paid $199 for. What did the form not ask? What did they mention in the free-text boxes that changes the picture? Where are two of their goals in conflict?
+5. **Write Section 5 — what you're NOT doing.** It's what makes you sound like a professional rather than a blog, and it's where you protect them from being sold something.
+6. **Say when it's out of your lane.** Wills, taxes, student-loan forgiveness → refer out, take no fee.
+7. **Read it out loud once**, print to PDF, email it. That read-aloud pass is the human review you advertised. Actually do it.
+
+Then: wait two weeks and email one line — *"How's week two going?"* That's where referrals come from.
 
 ## Before you scale past five clients
 
@@ -131,8 +168,10 @@ Every value the site reads lives in `config.js`. The only two required to take m
 
 | Key | Why |
 |---|---|
-| `checkout.fullReset` | Your Stripe Payment Link. Without it, CTAs collect emails instead. |
+| `checkout.instant` | Your $29 Stripe Payment Link. Without it, CTAs collect emails instead. |
 | `contactEmail` | Where everything falls back to. |
+
+And one you'll want within a day: `checkout.humanReview`, the $199 link sold from the bottom of every generated report.
 
 Everything else degrades gracefully. Empty analytics means no analytics, not a broken page.
 
@@ -140,8 +179,10 @@ Everything else degrades gracefully. Empty analytics means no analytics, not a b
 |---|---|
 | `index.html` | Full marketing site |
 | `mvp.html` | Stripped-down one-page version (swap it in as your index if the long page feels premature) |
-| `sample-report.html` | Your best sales asset **and** your fulfillment template |
-| `intake.html` | Post-payment client questionnaire |
-| `thanks.html` | Stripe's redirect target — sends buyers to the intake |
+| `report.html` | The generated instant review — your actual $29 product |
+| `assets/engine.js` | The analysis engine. All the math lives here. |
+| `sample-report.html` | Example of the $199 human report; also your fulfillment template |
+| `intake.html` | Post-payment questionnaire that feeds the engine |
+| `thanks.html` | Stripe's redirect target — records payment, sends buyers to the intake |
 | `legal.html` | Terms, privacy, refunds, disclosures. Stripe will look for this. |
 | `config.js` | Every setting, one file |
