@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>You're in — Operator</title>
+<meta name="robots" content="noindex" />
+<link rel="stylesheet" href="assets/site.css" />
+<script src="config.js"></script>
+<style>
+  .hero-thanks { text-align: center; max-width: 620px; margin: 0 auto; }
+  .seal { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: var(--bg); display: grid; place-items: center; margin: 0 auto 28px; }
+  .seal svg { width: 26px; height: 26px; }
+  .next-card { margin-top: 44px; text-align: left; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">O</span> <span data-brand>Operator</span></a>
+    <span class="tag accent"><span class="dot"></span> Payment received</span>
+  </div>
+</nav>
+
+<div class="page">
+<div class="container narrow">
+
+  <div class="hero-thanks">
+    <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h1>You're in.</h1>
+    <p style="margin-top:16px; font-size:1.05rem">Your receipt is on its way. There's one more step, and it's the one that makes your report worth reading.</p>
+    <a href="intake.html" data-intake class="btn btn-primary" style="margin-top:32px">Fill out my intake →</a>
+    <p class="muted" style="margin-top:14px">About 15 minutes. No logins, no account numbers.</p>
+  </div>
+
+  <div class="card next-card">
+    <span class="eyebrow">What happens next</span>
+    <div class="steps" style="margin-top:22px">
+      <div class="step done">
+        <div class="step-n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><h3>Payment</h3><p style="font-size:0.9rem; margin-top:4px">Done. Receipt is in your inbox.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div><h3>Your intake — today, ideally</h3><p style="font-size:0.9rem; margin-top:4px">The numbers and the context. Your clock starts when this lands, so the sooner you send it, the sooner you get the report.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div><h3>Analysis &amp; human review</h3><p style="font-size:0.9rem; margin-top:4px">Your full picture gets modeled, then a person reads every line before it goes out. If something in your intake doesn't add up, we email you rather than guess.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div><h3>Your roadmap arrives</h3><p style="font-size:0.9rem; margin-top:4px">Within <span data-turnaround="fullReset">5 business days</span> of your intake (<span data-turnaround="snapshot">2 business days</span> for a Snapshot). Reply to it with questions — that's included.</p></div>
+      </div>
+    </div>
+    <hr class="divider" />
+    <p style="font-size:0.9rem">Want to see the shape of what you're getting? <a href="sample-report.html" data-sample style="color:var(--accent)">Read a full sample report</a>.</p>
+    <p style="font-size:0.9rem; margin-top:10px">Something wrong with your order? Email <a data-email href="#" style="color:var(--accent)"></a> and a human will answer.</p>
+  </div>
+
+</div>
+</div>
+
+<footer>
+  <div class="container narrow">
+    <div class="foot-links">
+      <a href="index.html">Home</a><a href="sample-report.html">Sample report</a><a href="legal.html">Terms</a><a href="legal.html#privacy">Privacy</a><a href="legal.html#refunds">Refunds</a>
+    </div>
+    <p class="disclaimer" data-disclaimer></p>
+    <p class="copyright">© <span data-year>2026</span> <span data-brand>Operator</span>. All rights reserved.</p>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

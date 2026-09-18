@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Intake — Operator</title>
+<meta name="description" content="Step two: tell us your numbers. About 15 minutes, and you never need a login or an account number." />
+<meta name="robots" content="noindex" />
+<link rel="stylesheet" href="assets/site.css" />
+<script src="config.js"></script>
+<style>
+  .progress { position: sticky; top: 53px; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .progress-inner { max-width: 680px; margin: 0 auto; padding: 0 24px; }
+  .progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); width: 20%; transition: width 0.3s ease; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-tertiary); margin-top: 9px; }
+  .sec { display: none; }
+  .sec.active { display: block; animation: fade 0.25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .sec-head { margin-bottom: 28px; }
+  .sec-head h2 { margin: 8px 0 8px; }
+  .nav-btns { display: flex; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .nav-btns .btn { flex: 1; }
+  .safe-note { display: flex; gap: 12px; padding: 16px 18px; background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 30px; }
+  .safe-note svg { width: 17px; height: 17px; color: var(--accent); flex-shrink: 0; margin-top: 3px; }
+  .money-in { position: relative; }
+  .money-in span { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); font-size: 0.95rem; pointer-events: none; }
+  .money-in input { padding-left: 30px; }
+  .repeat-row { display: grid; gap: 10px; grid-template-columns: 1fr; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 12px; background: var(--bg-raised); }
+  @media (min-width: 620px) { .repeat-row { grid-template-columns: 2fr 1fr 1fr 1fr; align-items: end; } }
+  .repeat-row label { font-size: 0.76rem; color: var(--text-tertiary); margin-bottom: 5px; }
+  .link-btn { background: none; border: 0; color: var(--accent); font-family: inherit; font-size: 0.87rem; cursor: pointer; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
+  .done-panel { display: none; text-align: center; padding: 20px 0; }
+  .done-panel.show { display: block; }
+  .copy-box { text-align: left; background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; color: var(--text-secondary); white-space: pre-wrap; max-height: 260px; overflow-y: auto; margin: 20px 0; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">O</span> <span data-brand>Operator</span></a>
+    <span class="tag"><span class="dot"></span> Secure intake</span>
+  </div>
+</nav>
+
+<div class="progress">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="bar"></div></div>
+    <div class="progress-label"><span id="step-name">The basics</span><span id="step-count">Step 1 of 5</span></div>
+  </div>
+</div>
+
+<div class="page">
+<div class="container narrow">
+
+  <div id="form-wrap">
+  <div class="safe-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <div><strong style="color:var(--text)">We never ask for logins, account numbers, or your SSN.</strong> Round numbers are fine — we need the shape of your finances, not the decimals. Nothing here can be used to move your money.</div>
+  </div>
+
+  <form id="intake">
+
+    <!-- ========== 1 ========== -->
+    <section class="sec active" data-name="The basics">
+      <div class="sec-head">
+        <span class="eyebrow">Section 1</span>
+        <h2>Let's start with you.</h2>
+        <p>So we can match this intake to your payment and get the report to the right inbox.</p>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label for="name">Full name</label><input type="text" id="name" name="name" required autocomplete="name" /></div>
+        <div class="field"><label for="email">Email on your receipt</label><input type="email" id="email" name="email" required autocomplete="email" /></div>
+      </div>
+      <div class="field">
+        <label for="plan">Which did you buy?</label>
+        <select id="plan" name="plan" required>
+          <option value="">Select…</option>
+          <option value="The Snapshot">The Snapshot</option>
+          <option value="The Full Reset">The Full Reset</option>
+          <option value="Reset + Review">Reset + Review</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="state">What state do you live in?</label>
+        <div class="hint">Taxes and a few strategies are state-specific.</div>
+        <input type="text" id="state" name="state" placeholder="e.g. Texas" />
+      </div>
+      <div class="field">
+        <label for="household">Who's in the household?</label>
+        <input type="text" id="household" name="household" placeholder="e.g. Me, partner, two kids (4 and 7)" />
+      </div>
+    </section>
+
+    <!-- ========== 2 ========== -->
+    <section class="sec" data-name="Money in">
+      <div class="sec-head">
+        <span class="eyebrow">Section 2</span>
+        <h2>What comes in.</h2>
+        <p>Monthly, after taxes — what actually lands in your account.</p>
+      </div>
+      <div class="field-row two">
+        <div class="field">
+          <label for="income">Your take-home, per month</label>
+          <div class="money-in"><span>$</span><input type="number" id="income" name="income_monthly" min="0" step="50" required /></div>
+        </div>
+        <div class="field">
+          <label for="income2">Partner / second income</label>
+          <div class="money-in"><span>$</span><input type="number" id="income2" name="income_partner" min="0" step="50" placeholder="0" /></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="income_other">Anything irregular?</label>
+        <div class="hint">Side work, bonuses, commissions, tax refunds, seasonal swings. Roughly how much and how often.</div>
+        <textarea id="income_other" name="income_other" placeholder="e.g. ~$4,000 bonus each March; freelance $300–900 some months"></textarea>
+      </div>
+      <div class="field">
+        <label for="income_stability">How steady is it?</label>
+        <select id="income_stability" name="income_stability">
+          <option value="">Select…</option>
+          <option>Same every month — salaried</option>
+          <option>Mostly steady, small swings</option>
+          <option>Varies a lot month to month</option>
+          <option>Unpredictable / between things right now</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- ========== 3 ========== -->
+    <section class="sec" data-name="Money out">
+      <div class="sec-head">
+        <span class="eyebrow">Section 3</span>
+        <h2>What goes out.</h2>
+        <p>Estimates are fine. If you're unsure, guess high — we'd rather find good news later.</p>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label for="housing">Rent or mortgage</label><div class="money-in"><span>$</span><input type="number" id="housing" name="cost_housing" min="0" step="25" required /></div></div>
+        <div class="field"><label for="utilities">Utilities &amp; phone/internet</label><div class="money-in"><span>$</span><input type="number" id="utilities" name="cost_utilities" min="0" step="10" /></div></div>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label for="food">Groceries &amp; eating out</label><div class="money-in"><span>$</span><input type="number" id="food" name="cost_food" min="0" step="25" /></div></div>
+        <div class="field"><label for="transport">Car, gas, transit, insurance</label><div class="money-in"><span>$</span><input type="number" id="transport" name="cost_transport" min="0" step="25" /></div></div>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label for="insurance">Health &amp; other insurance</label><div class="money-in"><span>$</span><input type="number" id="insurance" name="cost_insurance" min="0" step="10" /></div></div>
+        <div class="field"><label for="childcare">Childcare / tuition / support</label><div class="money-in"><span>$</span><input type="number" id="childcare" name="cost_childcare" min="0" step="25" placeholder="0" /></div></div>
+      </div>
+      <div class="field">
+        <label for="subs">Subscriptions &amp; everything else</label>
+        <div class="hint">Streaming, gym, apps, pets, haircuts, gifts — the stuff that quietly adds up.</div>
+        <div class="money-in"><span>$</span><input type="number" id="subs" name="cost_other" min="0" step="10" /></div>
+      </div>
+      <div class="field">
+        <label for="leak">Where does money disappear that annoys you?</label>
+        <textarea id="leak" name="spending_leak" placeholder="Be honest — this is the most useful answer on the page."></textarea>
+      </div>
+    </section>
+
+    <!-- ========== 4 ========== -->
+    <section class="sec" data-name="What you owe & own">
+      <div class="sec-head">
+        <span class="eyebrow">Section 4</span>
+        <h2>What you owe, and what you've got.</h2>
+        <p>The debt list drives your payoff sequence, so take a minute here. Balance and rate are what matter.</p>
+      </div>
+
+      <label style="margin-bottom:10px">Debts</label>
+      <div class="hint">Credit cards, student loans, car, medical, personal, buy-now-pay-later, money owed to family.</div>
+      <div id="debts"></div>
+      <button type="button" class="link-btn" id="add-debt">+ Add another debt</button>
+
+      <hr class="divider" />
+
+      <div class="field-row two">
+        <div class="field"><label for="cash">Cash in checking + savings</label><div class="money-in"><span>$</span><input type="number" id="cash" name="asset_cash" min="0" step="100" required /></div></div>
+        <div class="field"><label for="retirement">Retirement accounts (total)</label><div class="money-in"><span>$</span><input type="number" id="retirement" name="asset_retirement" min="0" step="100" placeholder="0" /></div></div>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label for="invest">Brokerage / crypto / other investments</label><div class="money-in"><span>$</span><input type="number" id="invest" name="asset_invest" min="0" step="100" placeholder="0" /></div></div>
+        <div class="field"><label for="property">Home or property equity</label><div class="money-in"><span>$</span><input type="number" id="property" name="asset_property" min="0" step="1000" placeholder="0" /></div></div>
+      </div>
+      <div class="field">
+        <label for="employer_match">Does an employer match retirement contributions?</label>
+        <select id="employer_match" name="employer_match">
+          <option value="">Select…</option>
+          <option>Yes — and I'm getting the full match</option>
+          <option>Yes — but I'm not sure I'm getting all of it</option>
+          <option>Yes — and I'm not contributing</option>
+          <option>No match offered</option>
+          <option>I don't know</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="credit">Credit score, if you know it</label>
+        <input type="text" id="credit" name="credit_score" placeholder="e.g. 690, or 'no idea'" />
+      </div>
+    </section>
+
+    <!-- ========== 5 ========== -->
+    <section class="sec" data-name="Where you're going">
+      <div class="sec-head">
+        <span class="eyebrow">Section 5</span>
+        <h2>What are we aiming at?</h2>
+        <p>This is the part that turns a spreadsheet into a plan. Say more than you think you need to.</p>
+      </div>
+      <div class="field">
+        <label>What's the next 12 months supposed to look like?</label>
+        <div class="hint">Pick everything that applies.</div>
+        <fieldset>
+          <label class="choice"><input type="checkbox" name="goals" value="Get out of debt" /><span>Get out from under the debt</span></label>
+          <label class="choice"><input type="checkbox" name="goals" value="Buy a home" /><span>Buy a home</span></label>
+          <label class="choice"><input type="checkbox" name="goals" value="Build emergency savings" /><span>Build a real emergency fund</span></label>
+          <label class="choice"><input type="checkbox" name="goals" value="Start investing" /><span>Actually start investing</span></label>
+          <label class="choice"><input type="checkbox" name="goals" value="Start or grow a business" /><span>Start or grow a business</span></label>
+          <label class="choice"><input type="checkbox" name="goals" value="Stop living paycheck to paycheck" /><span>Stop living paycheck to paycheck</span></label>
+          <label class="choice"><input type="checkbox" name="goals" value="Raise income" /><span>Raise my income</span></label>
+          <label class="choice"><input type="checkbox" name="goals" value="Fix my credit" /><span>Fix my credit</span></label>
+        </fieldset>
+      </div>
+      <div class="field">
+        <label for="big_question">If you could get one question answered perfectly, what is it?</label>
+        <div class="hint">This becomes the headline of your report.</div>
+        <textarea id="big_question" name="big_question" required placeholder="e.g. Should I throw everything at the credit cards or save for a down payment first?"></textarea>
+      </div>
+      <div class="field">
+        <label for="deadline">Anything with a date on it?</label>
+        <textarea id="deadline" name="deadlines" placeholder="Lease ends in May, baby due in August, car is dying, promotion decision in Q2…"></textarea>
+      </div>
+      <div class="field">
+        <label for="tried">What have you already tried that didn't stick?</label>
+        <textarea id="tried" name="tried" placeholder="Budgeting apps, spreadsheets, consolidation, a advisor who wanted to sell you something…"></textarea>
+      </div>
+      <div class="field">
+        <label for="anything">Anything else we should know?</label>
+        <div class="hint">Health situations, family obligations, a business, an inheritance, a divorce, a lawsuit — context changes the plan.</div>
+        <textarea id="anything" name="anything_else"></textarea>
+      </div>
+      <label class="choice" style="margin-top:8px">
+        <input type="checkbox" name="consent" required />
+        <span>I understand <span data-brand>Operator</span> provides financial analysis and education, not registered investment, legal, or tax advice, and that I'm responsible for my own decisions. <a href="legal.html" target="_blank" style="color:var(--accent)">Terms</a>.</span>
+      </label>
+    </section>
+
+    <div class="nav-btns">
+      <button type="button" class="btn btn-secondary" id="back" style="display:none">Back</button>
+      <button type="button" class="btn btn-primary" id="next">Continue</button>
+      <button type="submit" class="btn btn-primary" id="submit" style="display:none">Send it in</button>
+    </div>
+  </form>
+  </div>
+
+  <div class="done-panel" id="done">
+    <div class="tag accent" style="margin-bottom:20px"><span class="dot"></span> Received</div>
+    <h2>That's everything we need.</h2>
+    <p style="margin-top:12px" id="done-copy">Your report is in the queue. You'll get it by email — check your spam folder once, just in case.</p>
+    <div id="fallback" style="display:none">
+      <p class="muted" style="margin-top:24px">Automatic delivery isn't switched on yet, so copy the summary below and email it to <a href="#" id="fallback-email" style="color:var(--accent)"></a>.</p>
+      <div class="copy-box" id="summary"></div>
+      <button class="btn btn-primary" id="copy-btn" type="button">Copy my answers</button>
+    </div>
+    <p style="margin-top:28px"><a href="index.html" class="btn btn-secondary">Back to the site</a></p>
+  </div>
+
+</div>
+</div>
+
+<footer>
+  <div class="container narrow">
+    <div class="foot-links">
+      <a href="index.html">Home</a><a href="sample-report.html">Sample report</a><a href="legal.html">Terms</a><a href="legal.html#privacy">Privacy</a>
+    </div>
+    <p class="disclaimer" data-disclaimer></p>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  var cfg = window.OPERATOR_CONFIG || {};
+  var secs = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var i = 0;
+  var bar = document.getElementById("bar");
+  var back = document.getElementById("back"), next = document.getElementById("next"), submit = document.getElementById("submit");
+  var form = document.getElementById("intake");
+
+  /* ---- debt rows ---- */
+  var debts = document.getElementById("debts"), n = 0;
+  function addDebt() {
+    n++;
+    var d = document.createElement("div");
+    d.className = "repeat-row";
+    d.innerHTML =
+      '<div><label>What is it?</label><input type="text" name="debt_' + n + '_name" placeholder="Chase card" /></div>' +
+      '<div><label>Balance</label><input type="number" name="debt_' + n + '_balance" min="0" step="50" placeholder="0" /></div>' +
+      '<div><label>Rate %</label><input type="number" name="debt_' + n + '_rate" min="0" step="0.1" placeholder="0" /></div>' +
+      '<div><label>Min / mo</label><input type="number" name="debt_' + n + '_min" min="0" step="5" placeholder="0" /></div>';
+    debts.appendChild(d);
+  }
+  addDebt(); addDebt(); addDebt();
+  document.getElementById("add-debt").addEventListener("click", addDebt);
+
+  /* ---- stepper ---- */
+  function show(k) {
+    secs[i].classList.remove("active");
+    i = k;
+    secs[i].classList.add("active");
+    bar.style.width = ((i + 1) / secs.length * 100) + "%";
+    document.getElementById("step-name").textContent = secs[i].getAttribute("data-name");
+    document.getElementById("step-count").textContent = "Step " + (i + 1) + " of " + secs.length;
+    back.style.display = i === 0 ? "none" : "";
+    next.style.display = i === secs.length - 1 ? "none" : "";
+    submit.style.display = i === secs.length - 1 ? "" : "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    save();
+  }
+  function valid() {
+    var ok = true;
+    secs[i].querySelectorAll("[required]").forEach(function (el) {
+      if (!el.checkValidity()) { if (ok) el.reportValidity(); ok = false; }
+    });
+    return ok;
+  }
+  next.addEventListener("click", function () { if (valid()) show(i + 1); });
+  back.addEventListener("click", function () { show(i - 1); });
+  bar.style.width = (1 / secs.length * 100) + "%";
+  document.getElementById("step-count").textContent = "Step 1 of " + secs.length;
+
+  /* ---- don't lose a half-filled intake ---- */
+  var KEY = "operator_intake_v1";
+  function save() {
+    try {
+      var o = {};
+      new FormData(form).forEach(function (v, k) { o[k] = o[k] ? o[k] + ", " + v : v; });
+      localStorage.setItem(KEY, JSON.stringify(o));
+    } catch (e) {}
+  }
+  function restore() {
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY) || "{}");
+      Object.keys(o).forEach(function (k) {
+        var el = form.elements[k];
+        if (!el) return;
+        if (el.type === "checkbox" || el.length) return;
+        el.value = o[k];
+      });
+    } catch (e) {}
+  }
+  restore();
+  form.addEventListener("input", save);
+
+  /* ---- readable summary (fallback + your own inbox) ---- */
+  function summarize() {
+    var o = {};
+    new FormData(form).forEach(function (v, k) { if (v !== "") o[k] = o[k] ? o[k] + ", " + v : v; });
+    var lines = ["OPERATOR INTAKE — " + (o.name || "unnamed"), "Submitted " + new Date().toLocaleString(), ""];
+    Object.keys(o).forEach(function (k) {
+      if (k === "consent") return;
+      lines.push(k.replace(/_/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); }) + ": " + o[k]);
+    });
+    return { text: lines.join("\n"), data: o };
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!valid()) return;
+    var s = summarize();
+    var endpoint = cfg.intakeFormEndpoint || cfg.emailFormEndpoint;
+    submit.disabled = true;
+    submit.textContent = "Sending…";
+
+    function finish(sent) {
+      try { localStorage.removeItem(KEY); } catch (er) {}
+      document.getElementById("form-wrap").style.display = "none";
+      document.querySelector(".progress").style.display = "none";
+      document.getElementById("done").classList.add("show");
+      if (!sent) {
+        var mail = cfg.contactEmail || "";
+        document.getElementById("fallback").style.display = "block";
+        document.getElementById("summary").textContent = s.text;
+        var a = document.getElementById("fallback-email");
+        a.textContent = mail;
+        a.href = "mailto:" + mail + "?subject=" + encodeURIComponent("Operator intake — " + (s.data.name || "")) + "&body=" + encodeURIComponent(s.text);
+      } else {
+        var t = (cfg.turnaround || {});
+        var days = s.data.plan === "The Snapshot" ? (t.snapshot || "2 business days") : (t.fullReset || "5 business days");
+        document.getElementById("done-copy").textContent =
+          "Your report is being built now. Expect it within " + days + ", by email. Check your spam folder once, just in case.";
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    if (endpoint) {
+      var payload = s.data;
+      payload._summary = s.text;
+      payload._subject = "Operator intake — " + (s.data.name || "new client");
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function (r) { finish(r.ok); }).catch(function () { finish(false); });
+    } else {
+      finish(false);
+    }
+  });
+
+  document.getElementById("copy-btn").addEventListener("click", function () {
+    var t = document.getElementById("summary").textContent;
+    var btn = this;
+    function ok() { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy my answers"; }, 2000); }
+    if (navigator.clipboard) { navigator.clipboard.writeText(t).then(ok, ok); }
+    else {
+      var ta = document.createElement("textarea");
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); ok();
+    }
+  });
+})();
+</script>
+</body>
+</html>

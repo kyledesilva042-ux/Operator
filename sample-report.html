@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sample Report — Operator</title>
+<meta name="description" content="A complete, real-format Operator report: position score, cash flow map, debt sequence, the answer to one big question, and a 90-day plan." />
+<meta property="og:title" content="A full Operator report, start to finish" />
+<meta property="og:description" content="Not a teaser. The whole thing — scores, sequence, and the exact 90 days." />
+<link rel="stylesheet" href="assets/site.css" />
+<script src="config.js"></script>
+<!-- ---------------------------------------------------------------------
+     THIS FILE IS TWO THINGS:
+       1. Your best sales asset — a prospect reads it and knows what they get.
+       2. Your FULFILLMENT TEMPLATE — copy it, replace the numbers and prose,
+          print to PDF, send. Every client report starts as a copy of this.
+     The client here is fictional. The numbers reconcile; keep it that way.
+     --------------------------------------------------------------------- -->
+<style>
+  .banner { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .banner-in { max-width: 1060px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+  .banner p { font-size: 0.88rem; margin: 0; }
+
+  .rpt { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+  .rpt-head { padding: clamp(40px,7vw,72px) 0 36px; border-bottom: 1px solid var(--border); }
+  .meta-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); margin-top: 32px; }
+  .meta-grid div { font-size: 0.82rem; }
+  .meta-grid dt { color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.68rem; font-weight: 600; margin-bottom: 5px; }
+  .meta-grid dd { color: var(--text); }
+
+  .rpt section { padding: clamp(44px,7vw,68px) 0; border-bottom: 1px solid var(--border); }
+  .rpt section:last-of-type { border-bottom: 0; }
+  .sec-num { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; }
+  .rpt h2 { margin: 10px 0 18px; }
+  .rpt h3 { margin: 30px 0 10px; }
+  .rpt p { margin-bottom: 15px; font-size: 0.97rem; }
+  .rpt p strong, .rpt li strong { color: var(--text); }
+  .rpt ul, .rpt ol { margin: 0 0 18px 20px; }
+  .rpt li { color: var(--text-secondary); font-size: 0.97rem; margin-bottom: 9px; }
+  .lede { font-size: 1.08rem; color: var(--text); line-height: 1.55; }
+
+  .score-wrap { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  .ring { --v: 41; width: 132px; height: 132px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; position: relative;
+    background: conic-gradient(var(--accent) calc(var(--v)*1%), var(--border) 0); }
+  .ring::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--bg); }
+  .ring b { position: relative; z-index: 1; font-size: 2.1rem; font-weight: 650; letter-spacing: -0.03em; }
+  .ring small { position: relative; z-index: 1; display: block; text-align: center; font-size: 0.68rem; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .bars { display: grid; gap: 15px; margin-top: 26px; }
+  .bar-row { display: grid; grid-template-columns: 1fr; gap: 6px; }
+  .bar-top { display: flex; justify-content: space-between; font-size: 0.86rem; }
+  .bar-top span:first-child { color: var(--text-secondary); }
+  .bar-top span:last-child { color: var(--text); font-variant-numeric: tabular-nums; }
+  .track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  .fill.dim { background: var(--text-tertiary); }
+
+  .stat-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); margin: 26px 0; }
+  .stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; }
+  .stat .k { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; }
+  .stat .v { font-size: 1.85rem; font-weight: 650; letter-spacing: -0.03em; margin: 8px 0 3px; font-variant-numeric: tabular-nums; }
+  .stat .s { font-size: 0.82rem; color: var(--text-tertiary); }
+  .stat .v.good { color: var(--positive); }
+  .stat .v.warn { color: var(--warn); }
+
+  .finding { border-left: 2px solid var(--accent); padding: 2px 0 2px 20px; margin: 26px 0; }
+  .finding .k { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .finding p:last-child { margin-bottom: 0; }
+
+  .verdict { background: var(--bg-card); border: 1px solid var(--accent); border-radius: var(--radius-lg); padding: 28px; margin: 26px 0; }
+  .verdict .k { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .verdict h3 { margin: 10px 0 12px; font-size: 1.3rem; }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.target td { color: var(--text); background: rgba(232,228,220,0.045); }
+  tr.target td:first-child { box-shadow: inset 2px 0 0 var(--accent); }
+
+  .week { display: grid; grid-template-columns: 76px 1fr; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .week:last-child { border-bottom: 0; }
+  .week-n { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; padding-top: 3px; }
+  .week h4 { font-size: 0.97rem; font-weight: 600; margin-bottom: 5px; }
+  .week p { font-size: 0.89rem; margin: 0; }
+  .week .why { font-size: 0.82rem; color: var(--text-tertiary); margin-top: 6px; }
+
+  .not { display: grid; gap: 18px; margin-top: 24px; }
+  .not-item { padding-left: 20px; border-left: 1px solid var(--border-strong); }
+  .not-item h4 { font-size: 0.95rem; margin-bottom: 5px; }
+  .not-item p { font-size: 0.89rem; margin: 0; }
+
+  .cta-block { text-align: center; padding: clamp(56px,9vw,90px) 0; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">O</span> <span data-brand>Operator</span></a>
+    <a href="#start" class="btn btn-primary btn-compact" data-checkout="fullReset">Start my Reset</a>
+  </div>
+</nav>
+
+<div class="banner no-print">
+  <div class="banner-in">
+    <p><strong style="color:var(--text)">This is a complete sample report.</strong> Same format, same depth, fictional client. Yours is built from your numbers.</p>
+    <button class="btn btn-secondary btn-compact" onclick="window.print()">Print / save PDF</button>
+  </div>
+</div>
+
+<div class="rpt">
+
+  <!-- ===================== COVER ===================== -->
+  <div class="rpt-head">
+    <span class="tag accent"><span class="dot"></span> Human reviewed</span>
+    <h1 style="margin-top:20px">The Full Reset</h1>
+    <p class="lede" style="margin-top:14px">Prepared for M. &amp; D. Reyes — Columbus, Ohio</p>
+    <dl class="meta-grid">
+      <div><dt>Report type</dt><dd>Full Reset</dd></div>
+      <div><dt>Intake received</dt><dd>March 4</dd></div>
+      <div><dt>Delivered</dt><dd>March 9</dd></div>
+      <div><dt>Analyst review</dt><dd>Complete</dd></div>
+    </dl>
+  </div>
+
+  <!-- ===================== 1. THE QUESTION ===================== -->
+  <section>
+    <span class="sec-num">01 — Your question</span>
+    <h2>“Should we buy a house next year, or kill the credit cards first?”</h2>
+    <p class="lede">Neither, exactly. You should spend the next 90 days fixing the thing underneath both of them — and then the house answers itself in about two years instead of never.</p>
+    <p>Here's the honest version. You earn $6,800 a month after taxes, which is a real income. After everything goes out, you keep $208 of it. That's 3% of what you make. At that rate, a $20,000 down payment is eight years away and the credit cards never actually die, because every time you get ahead of them something breaks and they absorb it.</p>
+    <p>The debt isn't your problem. The debt is a <em>symptom</em>. Your problem is that $495 a month is leaving the house through channels you'd close today if you could see them. Section 3 shows you exactly where. Once that's fixed, everything else — the cards, the buffer, the house — stops being a question of willpower and becomes a question of arithmetic.</p>
+    <div class="verdict">
+      <span class="k">The answer</span>
+      <h3>Don't buy in 2027. Target month 22–26.</h3>
+      <p>Buying next year would mean draining a savings account you don't have yet, at a debt-to-income ratio that will get you either denied or a rate you'd regret for thirty years. Follow the sequence in Section 6 and you arrive at a mortgage application with a $20,000 down payment, no credit card balances, a credit score roughly 40–60 points higher, and a payment you can actually carry. That's a genuinely different house and a genuinely different life. It's worth the extra year.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 2. POSITION ===================== -->
+  <section>
+    <span class="sec-num">02 — Where you stand</span>
+    <h2>Position score: 41 out of 100.</h2>
+    <div class="score-wrap">
+      <div class="ring"><div><b>41</b><small>Position</small></div></div>
+      <div style="flex:1; min-width:260px">
+        <p style="margin:0">Not a grade. It's a measure of how much room you have to absorb a surprise and how fast your position is improving. Below 50 means a single unexpected $1,500 expense would go straight onto a credit card. That's the fragility we're fixing first.</p>
+      </div>
+    </div>
+    <div class="bars">
+      <div class="bar-row"><div class="bar-top"><span>Cash reserve</span><span>15 / 100</span></div><div class="track"><div class="fill" style="width:15%"></div></div></div>
+      <div class="bar-row"><div class="bar-top"><span>Debt load</span><span>32 / 100</span></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
+      <div class="bar-row"><div class="bar-top"><span>Savings rate</span><span>22 / 100</span></div><div class="track"><div class="fill" style="width:22%"></div></div></div>
+      <div class="bar-row"><div class="bar-top"><span>Credit health</span><span>68 / 100</span></div><div class="track"><div class="fill" style="width:68%"></div></div></div>
+      <div class="bar-row"><div class="bar-top"><span>Income stability</span><span>80 / 100</span></div><div class="track"><div class="fill" style="width:80%"></div></div></div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="k">Monthly take-home</div><div class="v">$6,800</div><div class="s">Combined, after tax</div></div>
+      <div class="stat"><div class="k">Free cash flow</div><div class="v warn">$208</div><div class="s">3% of income</div></div>
+      <div class="stat"><div class="k">Cash on hand</div><div class="v warn">$2,400</div><div class="s">0.4 months of expenses</div></div>
+      <div class="stat"><div class="k">Total debt</div><div class="v">$49,600</div><div class="s">Across 5 obligations</div></div>
+    </div>
+    <p><strong>Two things are going right,</strong> and they're the reason this is fixable. Your income is stable and it's enough — plenty of people in your position are trying to solve an income problem with a spreadsheet, and that never works. And your credit is fine: 694 isn't a damaged score, it's a score being dragged down by card utilization. Pay the cards and it recovers on its own. There is nothing to "repair."</p>
+  </section>
+
+  <!-- ===================== 3. CASH FLOW ===================== -->
+  <section>
+    <span class="sec-num">03 — Where the money goes</span>
+    <h2>$495 a month is leaving without a decision behind it.</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Category</th><th class="n">Now</th><th class="n">Target</th><th class="n">Freed</th></tr></thead>
+        <tbody>
+          <tr><td>Housing (rent)</td><td class="n">$1,750</td><td class="n">$1,750</td><td class="n">—</td></tr>
+          <tr><td>Childcare</td><td class="n">$900</td><td class="n">$900</td><td class="n">—</td></tr>
+          <tr class="target"><td>Groceries &amp; eating out</td><td class="n">$1,150</td><td class="n">$950</td><td class="n">$200</td></tr>
+          <tr><td>Transport &amp; fuel</td><td class="n">$780</td><td class="n">$780</td><td class="n">—</td></tr>
+          <tr class="target"><td>Car insurance</td><td class="n">$240</td><td class="n">$170</td><td class="n">$70</td></tr>
+          <tr class="target"><td>Phone plan</td><td class="n">$185</td><td class="n">$140</td><td class="n">$45</td></tr>
+          <tr class="target"><td>Subscriptions &amp; misc</td><td class="n">$420</td><td class="n">$240</td><td class="n">$180</td></tr>
+          <tr><td>Utilities</td><td class="n">$125</td><td class="n">$125</td><td class="n">—</td></tr>
+          <tr><td>Debt minimums</td><td class="n">$1,042</td><td class="n">$1,042</td><td class="n">—</td></tr>
+          <tr><td><strong style="color:var(--text)">Total out</strong></td><td class="n"><strong style="color:var(--text)">$6,592</strong></td><td class="n"><strong style="color:var(--text)">$6,097</strong></td><td class="n"><strong style="color:var(--accent)">$495</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="k">Finding 01 — the subscriptions</span>
+      <p>You're carrying <strong>$180/month in subscriptions you named as “I'm not sure what that is”</strong> in your intake: two streaming services nobody has opened since last summer, a gym membership from a January that has passed, an app trial that converted in 2024, and a second cloud storage plan duplicating one you already pay for. This is $2,160 a year. It is the cheapest money you will ever find.</p>
+    </div>
+
+    <div class="finding">
+      <span class="k">Finding 02 — the $1,150 food line</span>
+      <p>This is 17% of take-home, and roughly $430 of it is eating out. We are not asking you to stop eating out — plans that require sainthood fail in week three. We're asking for <strong>$200 back</strong>, which is about four fewer takeout nights a month. You told us the weeknight ordering happens when nobody planned dinner, which makes this a logistics problem, not a discipline problem. Section 6, week 3.</p>
+    </div>
+
+    <div class="finding">
+      <span class="k">Finding 03 — the insurance and phone lines</span>
+      <p>$240/month on car insurance for two vehicles, one of them nine years old, with no claims in six years. Market rate for your profile in Franklin County is closer to $170. You are also on a legacy unlimited phone plan at $185 for two lines. Both of these are one phone call each. <strong>$115/month, roughly 45 minutes of work, permanent.</strong></p>
+    </div>
+
+    <div class="finding">
+      <span class="k">Finding 04 — the match you're not taking</span>
+      <p>Marcus's employer matches 4% and he's contributing 2%. <strong>He is declining $1,440 a year in free money.</strong> Raising to 4% costs about $120/month in take-home (less, after the tax deduction) and returns $120/month immediately. There is no investment on earth that reliably returns 100% on day one. This is the single highest-return move in this report, and it is also the only place we'll tell you to send money somewhere other than your debt while you're carrying a 24.9% card — because the match beats the card.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 4. DEBT ===================== -->
+  <section>
+    <span class="sec-num">04 — What you owe, in order</span>
+    <h2>Your payoff sequence.</h2>
+    <p>Order matters more than effort here. Paying these in the wrong order costs you roughly $3,100 in interest and about seven months. Attack strictly top to bottom — everything else gets the minimum only.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Order</th><th>Debt</th><th class="n">Balance</th><th class="n">Rate</th><th class="n">Minimum</th></tr></thead>
+        <tbody>
+          <tr class="target"><td><strong style="color:var(--accent)">1st</strong></td><td>Store card</td><td class="n">$2,100</td><td class="n">27.9%</td><td class="n">$75</td></tr>
+          <tr class="target"><td><strong style="color:var(--accent)">2nd</strong></td><td>Visa</td><td class="n">$8,400</td><td class="n">24.9%</td><td class="n">$210</td></tr>
+          <tr><td>3rd</td><td>Auto loan</td><td class="n">$14,200</td><td class="n">7.4%</td><td class="n">$412</td></tr>
+          <tr><td>4th</td><td>Student loans</td><td class="n">$21,600</td><td class="n">5.3%</td><td class="n">$245</td></tr>
+          <tr><td>Last</td><td>Medical (0% plan)</td><td class="n">$3,300</td><td class="n">0%</td><td class="n">$100</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Why this order</h3>
+    <ul>
+      <li><strong>The store card is first on both counts.</strong> It's the highest rate <em>and</em> the smallest balance, so the mathematically optimal choice and the psychologically satisfying one are the same debt. That's lucky, and we're taking it — you'll retire an entire account in about three months, which is the thing that makes people believe the plan.</li>
+      <li><strong>The medical debt goes last on purpose.</strong> It's 0%. Every dollar you send there instead of the Visa costs you 24.9%. Pay the minimum and feel nothing about it. <em>Separately:</em> call the billing office and ask for their financial-assistance application and a settlement figure for paying the balance at once. Hospital balances of this size are frequently reduced 30–50%. We've flagged this as upside, not as part of the plan.</li>
+      <li><strong>The car and student loans stay at minimum for now.</strong> Both are below what we'd consider urgent, and the student loans may qualify for an income-driven plan worth reviewing separately — see Section 7.</li>
+      <li><strong>Don't consolidate.</strong> Section 5.</li>
+    </ul>
+    <div class="stat-grid">
+      <div class="stat"><div class="k">Store card gone</div><div class="v">Month 6</div><div class="s">From today</div></div>
+      <div class="stat"><div class="k">Visa gone</div><div class="v">Month 16</div><div class="s">Both cards clear</div></div>
+      <div class="stat"><div class="k">Interest saved</div><div class="v good">$3,100</div><div class="s">vs. paying evenly</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== 5. NOT DOING ===================== -->
+  <section>
+    <span class="sec-num">05 — What we're not doing</span>
+    <h2>And why not.</h2>
+    <p>A plan is defined as much by what it refuses. Each of these is something you asked about or would likely be sold in the next six months.</p>
+    <div class="not">
+      <div class="not-item">
+        <h4>Not consolidating the cards into a personal loan.</h4>
+        <p>The offers you're seeing quote 14–18% with a 5% origination fee — about $525 up front to move $10,500 around. It lowers the payment, which feels like progress, while extending the term and leaving you with two empty credit cards and the same spending pattern that filled them. Fix the $495 leak first; the leak is what created the balance.</p>
+      </div>
+      <div class="not-item">
+        <h4>Not investing beyond the employer match.</h4>
+        <p>You asked about opening a brokerage account. Not yet. You're carrying 24.9% debt — paying it down is a guaranteed, tax-free 24.9% return, and no market projection beats a guarantee. The match is the one exception because it returns 100% instantly. Come back to this the month the Visa hits zero, and we'll mean it.</p>
+      </div>
+      <div class="not-item">
+        <h4>Not buying a house in 2027.</h4>
+        <p>At $1,042/month in debt payments against $6,800 take-home, your back-end DTI puts you in the range where you're either denied or approved at a rate that costs you tens of thousands over the loan. And a purchase next year would require spending a down payment you'd have to borrow, leaving zero buffer on the day you acquire a roof that can leak. This isn't "no." It's "in about 22 months, from a position of strength."</p>
+      </div>
+      <div class="not-item">
+        <h4>Not hiring a credit repair service.</h4>
+        <p>There is nothing on your report to repair — no collections, no late payments in four years. Your 694 is card utilization sitting at 71%. Get that under 30% and the score moves on its own, free. Anyone charging you $99/month to "fix" this is charging you to wait.</p>
+      </div>
+      <div class="not-item">
+        <h4>Not touching the 401(k).</h4>
+        <p>You mentioned the loan option. Borrowing from it to clear the cards converts unsecured debt into debt that becomes due in full if Marcus loses his job — which is precisely the moment you'd be least able to pay it. It also stops the compounding on the balance. The answer is no, and it stays no.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6. 90 DAYS ===================== -->
+  <section>
+    <span class="sec-num">06 — Your next 90 days</span>
+    <h2>Twelve weeks, in order.</h2>
+    <p>One thing per week. Do them in sequence — the early weeks fund the later ones. If a week slips, slide the rest down; don't skip.</p>
+    <div style="margin-top:28px">
+      <div class="week"><div class="week-n">Week 1</div><div><h4>Cancel the five subscriptions.</h4><p>The list is in Appendix A with the cancellation link for each. Sit down once, do all five, take about 25 minutes.</p><p class="why">+$180/month, permanent.</p></div></div>
+      <div class="week"><div class="week-n">Week 2</div><div><h4>Two phone calls: insurance and phone plan.</h4><p>Scripts are in Appendix B. Get three insurance quotes before you switch; ask your current carrier to match. For the phone plan, ask specifically to be moved off the legacy unlimited tier.</p><p class="why">+$115/month, permanent. About 45 minutes.</p></div></div>
+      <div class="week"><div class="week-n">Week 3</div><div><h4>Raise Marcus's 401(k) to 4%.</h4><p>One form through the benefits portal. Do it the same week the $295 above lands so the take-home change nets out invisibly.</p><p class="why">+$1,440/year in match. Costs ~$120/month in take-home.</p></div></div>
+      <div class="week"><div class="week-n">Week 4</div><div><h4>Set up the Thursday dinner plan.</h4><p>You identified unplanned weeknights as the takeout trigger. Pick one evening to decide the week's dinners and shop once. This is the only habit change in the plan and it's worth $200/month.</p><p class="why">+$200/month.</p></div></div>
+      <div class="week"><div class="week-n">Week 5</div><div><h4>Automate the split, the day after payday.</h4><p>Two automatic transfers timed for the 2nd and 17th: $583 total out of checking before you can see it. Weeks 5–8 it goes to savings.</p><p class="why">This is the mechanism. Everything above was just finding the money.</p></div></div>
+      <div class="week"><div class="week-n">Week 6</div><div><h4>Call the hospital billing office.</h4><p>Ask two questions, in this order: “Do you have a financial assistance or charity care application?” and “What's your settlement figure if I pay the balance in one payment?” Don't agree to anything on the call. Report back.</p><p class="why">Potential $1,000–1,600 off the $3,300. Upside, not in the plan.</p></div></div>
+      <div class="week"><div class="week-n">Week 7</div><div><h4>Freeze the store card.</h4><p>Remove it from every saved payment field — phone wallet, browser autofill, the two retail accounts. Not cancelled (that hurts utilization), just genuinely inconvenient to use.</p><p class="why">Prevents the balance re-growing while you pay it down.</p></div></div>
+      <div class="week"><div class="week-n">Week 8</div><div><h4>Buffer checkpoint: $3,566.</h4><p>Confirm the transfers ran. This is your starter buffer — roughly one flat tire plus one urgent-care visit. It's the account that stops the next surprise from landing on a card.</p><p class="why">Cash reserve score: 15 → 34.</p></div></div>
+      <div class="week"><div class="week-n">Week 9</div><div><h4>Redirect everything to the store card.</h4><p>Change the automatic transfers from savings to the store card. $583 plus the $75 minimum: $658/month.</p><p class="why">Balance starts falling fast enough to feel.</p></div></div>
+      <div class="week"><div class="week-n">Week 10</div><div><h4>90-minute income conversation.</h4><p>Dani mentioned the certification. Price it, find out what it's worth locally, and decide yes or no by the end of the week. You've cut what's cuttable — from here the leverage is on the income side.</p><p class="why">The only lever with no ceiling.</p></div></div>
+      <div class="week"><div class="week-n">Week 11</div><div><h4>Pull all three credit reports, free.</h4><p>annualcreditreport.com. You're looking for errors only — anything you don't recognize. Dispute in writing.</p><p class="why">Housekeeping before the mortgage conversation in year two.</p></div></div>
+      <div class="week"><div class="week-n">Week 12</div><div><h4>Review the quarter and re-run the numbers.</h4><p>Confirm every number below. Then the plan just repeats: the store card clears around month 6, and its $658 rolls onto the Visa at $868/month.</p><p class="why">The sequence is self-sustaining from here.</p></div></div>
+    </div>
+    <h3>Where you'll be on day 90</h3>
+    <div class="stat-grid">
+      <div class="stat"><div class="k">Free cash flow</div><div class="v good">$703</div><div class="s">was $208</div></div>
+      <div class="stat"><div class="k">Cash buffer</div><div class="v good">$3,566</div><div class="s">was $2,400</div></div>
+      <div class="stat"><div class="k">Store card</div><div class="v good">~$1,490</div><div class="s">was $2,100</div></div>
+      <div class="stat"><div class="k">Position score</div><div class="v good">58</div><div class="s">was 41</div></div>
+    </div>
+    <p class="muted">Projections assume the plan is followed and your intake figures are accurate. They are arithmetic, not a promise.</p>
+  </section>
+
+  <!-- ===================== 7. REFERRALS ===================== -->
+  <section>
+    <span class="sec-num">07 — Outside our lane</span>
+    <h2>Three things that need a licensed professional.</h2>
+    <p>We'll always tell you when something is beyond what we do, and we don't take a fee for saying so.</p>
+    <ul>
+      <li><strong>The student loans → a student loan specialist or your servicer directly.</strong> Dani's employment may qualify for an income-driven plan or forgiveness track. That's a determination with real legal consequences and we won't guess at it. Start with your servicer; it's free.</li>
+      <li><strong>Your tax withholding → a CPA, before next filing.</strong> You received a $3,100 refund last year, which means you lent the government about $258/month interest-free. Adjusting your W-4 could put most of that in your paycheck now, where this plan can use it. A CPA should confirm the number.</li>
+      <li><strong>Wills and guardianship → an estate attorney.</strong> You have two children under eight and no will. This has nothing to do with money and it is the most important item in this report. A simple will in Ohio typically runs $300–600. Please don't wait for the debt to be gone.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== 8. ONE PAGE ===================== -->
+  <section>
+    <span class="sec-num">08 — If you only remember one page</span>
+    <h2>The whole plan, in six lines.</h2>
+    <ol>
+      <li>Free $495/month by cancelling five subscriptions and making three phone calls.</li>
+      <li>Take the full 401(k) match. It's a 100% return and you're declining it.</li>
+      <li>Build the buffer to $3,566 first — that's what stops the cycle restarting.</li>
+      <li>Then the store card, then the Visa. Minimums on everything else, including the 0% medical.</li>
+      <li>Don't consolidate, don't invest beyond the match yet, don't touch the 401(k), don't buy a house next year.</li>
+      <li>Get a will.</li>
+    </ol>
+    <p style="margin-top:22px">You are not bad with money. You've been running a household on a stable income with no map, and the map was the missing part. It's in your hands now.</p>
+    <p class="muted" style="margin-top:26px">Reviewed and approved by a human analyst before delivery. Questions about anything in this report are included for 30 days — just reply.</p>
+  </section>
+
+</div>
+
+<!-- ===================== CTA ===================== -->
+<div class="cta-block no-print" id="start">
+  <div class="container narrow">
+    <h2>Your numbers, your report, same format.</h2>
+    <p style="margin-top:14px">One intake. One human-reviewed roadmap. A next 90 days you can actually follow.</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:30px">
+      <a href="#" class="btn btn-primary" data-checkout="fullReset">Start my Full Reset — <span data-price="fullReset">$349</span></a>
+      <a href="index.html#pricing" class="btn btn-secondary">See all plans</a>
+    </div>
+    <p class="muted" style="margin-top:18px">Delivered in <span data-turnaround="fullReset">5 business days</span>. Full refund before delivery, any time.</p>
+  </div>
+</div>
+
+<footer class="no-print">
+  <div class="container">
+    <div class="foot-links">
+      <a href="index.html">Home</a><a href="index.html#pricing">Pricing</a><a href="legal.html">Terms</a><a href="legal.html#privacy">Privacy</a><a href="legal.html#refunds">Refunds</a>
+    </div>
+    <p class="disclaimer" data-disclaimer></p>
+    <p class="copyright">© <span data-year>2026</span> <span data-brand>Operator</span>. All rights reserved. The client in this sample is fictional.</p>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

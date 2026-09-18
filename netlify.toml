@@ -1,0 +1,49 @@
+# Netlify: drag this folder onto app.netlify.com/drop, or connect the repo.
+# No build step — these are static files.
+[build]
+  publish = "."
+  command = ""
+
+# Pretty URLs: /sample, /intake, /terms
+[[redirects]]
+  from = "/sample"
+  to = "/sample-report.html"
+  status = 200
+[[redirects]]
+  from = "/intake"
+  to = "/intake.html"
+  status = 200
+[[redirects]]
+  from = "/terms"
+  to = "/legal.html"
+  status = 200
+[[redirects]]
+  from = "/privacy"
+  to = "/legal.html"
+  status = 200
+[[redirects]]
+  from = "/thanks"
+  to = "/thanks.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Config and pages must never be served stale — you'll be editing config.js live.
+[[headers]]
+  for = "/config.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

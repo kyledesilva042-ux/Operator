@@ -28,39 +28,8 @@
   "description": "Securely upload your financial information. Our system analyzes your complete financial picture, a trained analyst reviews every report, and you receive a personalized roadmap for your next 90 days."
 }
 </script>
-<!-- ============================================================
-     INTEGRATION CONFIG
-     Fill these in as you create each account. Every value is
-     optional — empty values fall back gracefully:
-       · no checkout link  → button opens the waitlist email modal
-       · no sample URL     → button opens the email-capture modal
-       · no chat/analytics → nothing is loaded
-     See README.md for step-by-step activation instructions.
-     ============================================================ -->
-<script>
-window.OPERATOR_CONFIG = {
-  // Stripe Payment Links (Stripe Dashboard → Payment Links → copy URL)
-  checkout: {
-    snapshot:    "",   // e.g. "https://buy.stripe.com/xxxx"
-    fullReset:   "",
-    resetReview: ""
-  },
-  // Intake questionnaire share URL (Typeform / Fillout). Used as the
-  // checkout fallback if a plan's Stripe link is empty.
-  intakeFormUrl: "",
-  // Sample report URL (hosted PDF or gated page)
-  sampleReportUrl: "",
-  // Email-capture endpoint (e.g. Formspree: "https://formspree.io/f/xxxx").
-  // Powers the waitlist/sample modal. Empty = mailto fallback.
-  emailFormEndpoint: "",
-  // Crisp chat Website ID (app.crisp.chat → Settings → Setup). "" = no chat.
-  crispWebsiteId: "",
-  // Plausible analytics domain (e.g. "useoperator.com"). "" = no analytics.
-  plausibleDomain: "",
-  // Fallback contact for the mailto path
-  contactEmail: "hello@example.com"
-};
-</script>
+<!-- All configuration lives in config.js — one file, every page. -->
+<script src="config.js"></script>
 <style>
   :root {
     --bg: #0A0A0B;
@@ -1014,7 +983,7 @@ window.OPERATOR_CONFIG = {
           <h3>The Snapshot</h3>
           <p class="plan-desc">Answers to one big financial question.</p>
         </div>
-        <div class="price">$XX</div>
+        <div class="price" data-price="snapshot">$149</div>
         <div class="price-features">
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>One decision assessment (house, debt, business, etc.)</div>
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Core financial picture summary</div>
@@ -1028,7 +997,7 @@ window.OPERATOR_CONFIG = {
           <h3>The Full Reset</h3>
           <p class="plan-desc">The complete financial operating system.</p>
         </div>
-        <div class="price">$XXX</div>
+        <div class="price" data-price="fullReset">$349</div>
         <div class="price-features">
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in The Snapshot</div>
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Complete financial picture report</div>
@@ -1043,7 +1012,7 @@ window.OPERATOR_CONFIG = {
           <h3>Reset + Review</h3>
           <p class="plan-desc">The Full Reset, plus a quarterly re-map.</p>
         </div>
-        <div class="price">$XXX<small>/quarter</small></div>
+        <div class="price" data-price="resetReview">$249<small>/quarter</small></div>
         <div class="price-features">
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in The Full Reset</div>
           <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly position re-analysis</div>
@@ -1075,12 +1044,13 @@ window.OPERATOR_CONFIG = {
       <a href="#included">What's Included</a>
       <a href="#faq">FAQ</a>
       <a href="#pricing">Pricing</a>
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Security</a>
+      <a href="sample-report.html">Sample Report</a>
+      <a href="legal.html#privacy">Privacy</a>
+      <a href="legal.html#terms">Terms</a>
+      <a href="legal.html#refunds">Refunds</a>
     </div>
     <p class="disclaimer">Operator provides personalized financial analysis and education. Operator is not a registered investment advisor, broker-dealer, law firm, or accounting firm, and does not provide investment, legal, or tax advice. We never guarantee financial results. When specialized advice is needed, we refer clients to vetted, licensed professionals. Individual outcomes depend on your circumstances and your execution of the plan.</p>
-    <p class="copyright">© 2026 Operator. All rights reserved.</p>
+    <p class="copyright">© <span id="yr">2026</span> Operator. All rights reserved.</p>
   </div>
 </footer>
 
@@ -1120,15 +1090,27 @@ window.OPERATOR_CONFIG = {
   overlay.querySelector(".modal-x").addEventListener("click", closeModal);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
 
+  // Prices and turnaround times — filled from config.js so they live in one place
+  document.querySelectorAll("[data-price]").forEach(function (el) {
+    var p = (cfg.prices || {})[el.getAttribute("data-price")];
+    if (!p) return;
+    el.textContent = p.amount;
+    if (p.note) { var sm = document.createElement("small"); sm.textContent = p.note; el.appendChild(sm); }
+  });
+  document.querySelectorAll("[data-turnaround]").forEach(function (el) {
+    var t = (cfg.turnaround || {})[el.getAttribute("data-turnaround")];
+    if (t) el.textContent = t;
+  });
+
   // Checkout buttons → Stripe Payment Link, else intake form, else waitlist modal
   document.querySelectorAll("[data-checkout]").forEach(function (el) {
     var plan = el.getAttribute("data-checkout");
     var link = (cfg.checkout || {})[plan];
     if (link) {
       el.href = link;
-    } else if (cfg.intakeFormUrl) {
-      el.href = cfg.intakeFormUrl;
     } else {
+      // No Stripe link yet: capture the email instead. Never send someone to
+      // the intake form before they've paid — that's the post-payment step.
       el.addEventListener("click", function (e) {
         e.preventDefault();
         openModal("Join the waitlist", "Checkout opens soon. Leave your email and you'll be first in line.", plan);
@@ -1193,6 +1175,8 @@ window.OPERATOR_CONFIG = {
     p.setAttribute("data-domain", cfg.plausibleDomain);
     document.head.appendChild(p);
   }
+  var yr = document.getElementById("yr");
+  if (yr) yr.textContent = new Date().getFullYear();
 })();
 </script>
 

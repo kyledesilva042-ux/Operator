@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /intake.html
+Disallow: /thanks.html
+
+# Replace example.com with your domain once the site is live.
+Sitemap: https://example.com/sitemap.xml
