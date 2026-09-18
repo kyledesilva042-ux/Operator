@@ -183,7 +183,9 @@ No gradients anywhere. No saturated colors. The accent is a *warm paper white* �
 2. **Secondary CTA de-risks.** "See a Sample Report" serves not-ready visitors; on the live site, gate the full sample behind an email for lead capture.
 3. **Lead with human review.** It's the #1 objection-killer vs. AI chatbots — hence the badge above the H1, the "Human Reviewed ✓" tags, and its own comparison-table row.
 4. **Show the product early.** The hero roadmap preview makes the abstract deliverable concrete within one scroll — specificity ("Kill the 24.9% card first") sells more than any adjective.
-5. **Trust microcopy under CTAs:** encryption, never-sold data, no investment products — placed at the moment of decision, not buried in the footer.
+5. **Trust microcopy under CTAs:** what we never ask for (logins, account numbers), never-sold data,
+   no investment products — placed at the moment of decision, not buried in the footer. Claim only what
+   is actually true today; "bank-level encryption" was removed for exactly that reason.
 6. **Comparison table as positioning:** each row rules out a category the visitor has already tried and been burned by.
 7. **FAQ handles compliance objections honestly** ("Do you guarantee results? No — and be suspicious of anyone who does"), which reads as integrity and converts skeptics.
 8. **Featured middle tier** with accent border + "Most Popular" tag for price anchoring; flat pricing framed as an incentive alignment ("our only incentive is to be right").
