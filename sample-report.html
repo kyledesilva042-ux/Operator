@@ -16,7 +16,80 @@
           print to PDF, send. Every client report starts as a copy of this.
      The client here is fictional. The numbers reconcile; keep it that way.
      --------------------------------------------------------------------- -->
-<link rel="stylesheet" href="assets/report.css" />
+<style>
+  .banner { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .banner-in { max-width: 1060px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+  .banner p { font-size: 0.88rem; margin: 0; }
+
+  .rpt { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+  .rpt-head { padding: clamp(40px,7vw,72px) 0 36px; border-bottom: 1px solid var(--border); }
+  .meta-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); margin-top: 32px; }
+  .meta-grid div { font-size: 0.82rem; }
+  .meta-grid dt { color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.68rem; font-weight: 600; margin-bottom: 5px; }
+  .meta-grid dd { color: var(--text); }
+
+  .rpt section { padding: clamp(44px,7vw,68px) 0; border-bottom: 1px solid var(--border); }
+  .rpt section:last-of-type { border-bottom: 0; }
+  .sec-num { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; }
+  .rpt h2 { margin: 10px 0 18px; }
+  .rpt h3 { margin: 30px 0 10px; }
+  .rpt p { margin-bottom: 15px; font-size: 0.97rem; }
+  .rpt p strong, .rpt li strong { color: var(--text); }
+  .rpt ul, .rpt ol { margin: 0 0 18px 20px; }
+  .rpt li { color: var(--text-secondary); font-size: 0.97rem; margin-bottom: 9px; }
+  .lede { font-size: 1.08rem; color: var(--text); line-height: 1.55; }
+
+  .score-wrap { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  .ring { --v: 41; width: 132px; height: 132px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; position: relative;
+    background: conic-gradient(var(--accent) calc(var(--v)*1%), var(--border) 0); }
+  .ring::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--bg); }
+  .ring b { position: relative; z-index: 1; font-size: 2.1rem; font-weight: 650; letter-spacing: -0.03em; }
+  .ring small { position: relative; z-index: 1; display: block; text-align: center; font-size: 0.68rem; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .bars { display: grid; gap: 15px; margin-top: 26px; }
+  .bar-row { display: grid; grid-template-columns: 1fr; gap: 6px; }
+  .bar-top { display: flex; justify-content: space-between; font-size: 0.86rem; }
+  .bar-top span:first-child { color: var(--text-secondary); }
+  .bar-top span:last-child { color: var(--text); font-variant-numeric: tabular-nums; }
+  .track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  .fill.dim { background: var(--text-tertiary); }
+
+  .stat-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); margin: 26px 0; }
+  .stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; }
+  .stat .k { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; }
+  .stat .v { font-size: 1.85rem; font-weight: 650; letter-spacing: -0.03em; margin: 8px 0 3px; font-variant-numeric: tabular-nums; }
+  .stat .s { font-size: 0.82rem; color: var(--text-tertiary); }
+  .stat .v.good { color: var(--positive); }
+  .stat .v.warn { color: var(--warn); }
+
+  .finding { border-left: 2px solid var(--accent); padding: 2px 0 2px 20px; margin: 26px 0; }
+  .finding .k { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .finding p:last-child { margin-bottom: 0; }
+
+  .verdict { background: var(--bg-card); border: 1px solid var(--accent); border-radius: var(--radius-lg); padding: 28px; margin: 26px 0; }
+  .verdict .k { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .verdict h3 { margin: 10px 0 12px; font-size: 1.3rem; }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.target td { color: var(--text); background: rgba(232,228,220,0.045); }
+  tr.target td:first-child { box-shadow: inset 2px 0 0 var(--accent); }
+
+  .week { display: grid; grid-template-columns: 76px 1fr; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .week:last-child { border-bottom: 0; }
+  .week-n { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; padding-top: 3px; }
+  .week h4 { font-size: 0.97rem; font-weight: 600; margin-bottom: 5px; }
+  .week p { font-size: 0.89rem; margin: 0; }
+  .week .why { font-size: 0.82rem; color: var(--text-tertiary); margin-top: 6px; }
+
+  .not { display: grid; gap: 18px; margin-top: 24px; }
+  .not-item { padding-left: 20px; border-left: 1px solid var(--border-strong); }
+  .not-item h4 { font-size: 0.95rem; margin-bottom: 5px; }
+  .not-item p { font-size: 0.89rem; margin: 0; }
+
+  .cta-block { text-align: center; padding: clamp(56px,9vw,90px) 0; }
+</style>
 </head>
 <body>
 
